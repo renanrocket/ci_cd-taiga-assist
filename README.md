@@ -1,7 +1,70 @@
-# Tauri + SvelteKit + TypeScript
+# Taiga Assist
 
-This template should help get you started developing with Tauri, SvelteKit and TypeScript in Vite.
+App desktop (Windows, macOS e Linux) para **fazer commit e push em lote, gerar o relatório com o Kiro CLI e manter o
+Taiga em dia**: criar a US da entrega, resumir e fechar US e prestar conta na reunião.
 
-## Recommended IDE Setup
+## Para que serve
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+O fluxo de quem desenvolve era *programar → fazer o deploy → escrever o relatório no Taiga*. Com IA, programar ficou
+muito mais rápido, e o deploy já está sendo automatizado. **Sobrou o relatório**: em semana cheia, até duas horas.
+O Taiga Assist tira essa parte do caminho: o app envia o código, o Kiro lê as alterações e escreve o relatório, e a
+história aparece no Taiga com título, descrição e pontos.
+
+## O que ele faz
+
+- **Pasta local:** escolha as branches do repositório, escreva a mensagem do commit e, com um clique, faça o
+  commit, o push e crie a US no Taiga (o Kiro escreve a descrição e os pontos a partir do que mudou).
+- **Taiga US's:** liste as suas US, peça ao Kiro um resumo do que foi feito e do que ficou pendente (**Revisar e
+  fechar**), confira os pontos e feche a US no Taiga.
+- **Prestar conta em reunião:** marque os pontos que quer apresentar e exporte direto para a US da reunião, que recebe
+  os itens agrupados por US sob "Feito".
+- **Atualização automática:** quando sai uma versão nova, o app avisa e você escolhe **Atualizar agora** ou **Agora
+  não**. Banco, credenciais e configurações são mantidos.
+
+Toda ação que altera o Taiga (criar, fechar, editar descrição) pede confirmação antes.
+
+## Instalar
+
+1. Baixe o instalador do seu sistema na página de versões:
+   **<https://github.com/renanrocket/ci_cd-taiga-assist/releases/latest>**
+   - Windows: arquivo `.exe`
+   - macOS: arquivo `.dmg` (Apple Silicon ou Intel, conforme o seu Mac)
+   - Linux: `.AppImage` (recomendado, atualiza sozinho) ou `.deb`
+2. Na primeira abertura o sistema pode avisar que o app **não é assinado** (Windows SmartScreen, macOS Gatekeeper).
+   É só confirmar ("Executar assim mesmo" / "Abrir mesmo assim"). As atualizações seguintes não repetem o aviso.
+3. Tenha instalados, à parte, o **Git** e o **Kiro CLI** (o app só confere se eles existem).
+
+## Configurar (cinco passos, na primeira abertura)
+
+1. **Pré-requisitos:** confira se o Git e o Kiro CLI foram encontrados.
+2. **Pasta local:** escolha a pasta onde ficam os seus projetos.
+3. **Credencial do repositório:** cadastre como o app acessa os repositórios (token, chave SSH ou o Git do sistema) e
+   clique em **Testar**.
+4. **Taiga:** entre na sua conta, importe os projetos e ligue cada repositório a um projeto e a uma branch.
+5. **Kiro:** entre no Kiro, que escreve os relatórios.
+
+Tudo pode ser mudado depois em **Configurações**. Nada fica fixo no código: URLs, branches, papéis, prazos e a US de
+destino são configuração de cada pessoa. Segredos ficam só no chaveiro do sistema.
+
+## Desenvolvimento
+
+Tauri 2 (backend em Rust) com interface em SvelteKit e TypeScript. Usa o `git` e o `kiro-cli` **do sistema**.
+
+```bash
+npm install
+npm run tauri dev                                   # app em desenvolvimento
+cargo test --manifest-path src-tauri/Cargo.toml     # testes do backend
+npx svelte-check                                    # checagem do front
+npm run versao -- X.Y.Z                             # atualiza a versão nos 3 arquivos (depois: commit, tag vX.Y.Z, push)
+```
+
+Para publicar uma versão, envie a tag `vX.Y.Z`: o GitHub Actions compila para os três sistemas, assina as
+atualizações e cria a Release (passo a passo em [docs/atualizacoes.md](docs/atualizacoes.md)).
+
+## Documentação
+
+- [docs/spec.md](docs/spec.md): especificação e mapa de portabilidade do projeto irmão `ci_cd`.
+- [docs/atualizacoes.md](docs/atualizacoes.md): instalação, atualização automática, publicação e chave de assinatura.
+- [docs/ui-conventions.md](docs/ui-conventions.md): convenções de interface.
+- [docs/video-producao.md](docs/video-producao.md) e [docs/video-spec.md](docs/video-spec.md): vídeo de apresentação.
+- [docs/pending.md](docs/pending.md): pendências.

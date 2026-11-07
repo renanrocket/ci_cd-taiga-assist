@@ -36,6 +36,13 @@ mantém banco, credenciais e configurações.
    O workflow **recusa** a publicação se a tag não bater com a versão do app.
 4. Os apps instalados passam a ver a versão nova na próxima verificação.
 
+> **Estado atual (2026-11-07):** o job do **Windows está desativado** em `release.yml` (comentado) enquanto os testes do
+> Windows são corrigidos; a `v0.1.0` sai só com macOS e Linux. Para testar o Windows **sem publicar**, use o workflow
+> **Teste Windows** (`.github/workflows/teste-windows.yml`): Actions → Teste Windows → Run workflow (ou envie a branch
+> `teste-windows`). Ele roda todos os testes (falhas viram anotações na página do run) e gera o instalador `.exe` como
+> artefato **instalador-windows** (baixar exige login no GitHub; vem num `.zip`). Quando o Windows estiver ok, reative a
+> linha no `release.yml` e publique a versão seguinte (ex.: `v0.1.1`).
+
 O repositório é público, então o próprio **GitHub Releases** serve os arquivos: não há servidor para manter.
 A URL consultada pelos apps é
 `https://github.com/renanrocket/ci_cd-taiga-assist/releases/latest/download/latest.json`.
@@ -52,10 +59,9 @@ A URL consultada pelos apps é
 - **Guarde uma cópia em local seguro** (gerenciador de senhas). Se perder a chave, os apps já instalados **não
   aceitam mais atualizações** e todo mundo teria que reinstalar à mão. Se vazar, qualquer pessoa pode
   publicar uma "atualização" que os apps aceitam.
-- **Decisão pendente:** a chave atual foi gerada **sem senha** (para poder ser usada no CI sem interação).
-  Como nada foi distribuído ainda, dá para gerar outra, com senha, antes do primeiro lançamento
-  (`npx tauri signer generate -w ~/.tauri/ci_cd-taiga-assist.key`) e atualizar a chave pública no
-  `tauri.conf.json`. **Depois do primeiro lançamento a chave não pode mais mudar.**
+- **Decisão (2026-11-07):** a chave fica **sem senha**, e o conteúdo do `.key` já está no Secret
+  `TAURI_SIGNING_PRIVATE_KEY` (não existe o Secret da senha). A proteção vem do GitHub Secrets (cifrado, não aparece em
+  logs) e do arquivo local com permissão 600. **Depois do primeiro lançamento a chave não pode mais mudar.**
 
 ## 5. Cuidados e limites
 
@@ -81,7 +87,7 @@ Fazer **em cada sistema**, com uma máquina limpa se possível:
 
 ## 7. Pontos a decidir
 
-1. Chave de assinatura **com senha** (mais seguro) ou sem (mais simples)? Ver seção 4.
-2. Divulgar só o **AppImage** para Linux (atualiza sozinho) ou também o `.deb`?
+1. ~~Chave com ou sem senha~~: decidido, sem senha (seção 4).
+2. Divulgar só o **AppImage** para Linux (atualiza sozinho) ou também o `.deb`? (hoje a Release publica os dois).
 3. Comprar certificado de assinatura (Windows) / conta Apple Developer (macOS) para remover os avisos da
    primeira instalação? Não é necessário para o funcionamento das atualizações.

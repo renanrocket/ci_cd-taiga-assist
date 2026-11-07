@@ -20,7 +20,9 @@ jobs:
           - { nome: "macOS (Apple Silicon)", os: macos-latest, rust_targets: "aarch64-apple-darwin,x86_64-apple-darwin", args: "--target aarch64-apple-darwin --bundles app,dmg" }
           - { nome: "macOS (Intel)", os: macos-latest, rust_targets: "aarch64-apple-darwin,x86_64-apple-darwin", args: "--target x86_64-apple-darwin --bundles app,dmg" }
           - { nome: "Linux (AppImage e .deb)", os: ubuntu-22.04, rust_targets: "", args: "--bundles appimage,deb" }
-          - { nome: "Windows", os: windows-latest, rust_targets: "", args: "--bundles nsis" }
+          # Windows fora da v0.1.0 enquanto os testes do Windows são corrigidos (ver teste-windows.yml).
+          # Para voltar: reativar a linha abaixo.
+          # - { nome: "Windows", os: windows-latest, rust_targets: "", args: "--bundles nsis" }
     runs-on: ${{ matrix.os }}
 
     steps:
