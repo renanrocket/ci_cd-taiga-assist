@@ -41,6 +41,10 @@ item de lista, mensagem de erro). Tema claro/escuro por `prefers-color-scheme`.
   Configurações na seção certa, via `nav.svelte.ts`). Quem decide é `capacidades.svelte.ts`: **base** = Git + pasta
   (commit e push); **Kiro pronto** = binário achado e logado/API key; **Taiga pronto** = conta cadastrada **e** Kiro
   pronto (o Taiga depende do Kiro). Vale para a caixa "Criar US" (Pasta local), a aba Taiga US's e o cadastro do Taiga.
+- **Atualizar do remoto (Pasta local):** botão pequeno (`.mini`) **ao lado de cada branch** que o remoto deixou
+  desatualizada (badge "desatualizada"), rótulo "Atualizar do remoto". É o `git pull` só fast-forward: não troca de branch, não
+  cria merge e recusa com mensagem clara se a branch divergiu ou se alterações locais conflitam. O resultado aparece na faixa
+  de aviso/erro da tela.
 - **Criar US no Taiga (Pasta local):** um único checkbox **global**, logo abaixo de "Fazer push depois do
   commit", marcado por padrão, com tooltip. Desmarcado, nenhum relatório nem US é criado, mesmo com Taiga e
   Kiro configurados. Depende do push (desabilitado sem push) e de Kiro + Taiga prontos (senão fica desabilitado, com o

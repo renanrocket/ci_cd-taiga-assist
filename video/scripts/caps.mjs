@@ -32,13 +32,13 @@ export function cap2(c, T) {
   // f2: pré-requisitos
   const g = S[2] - 0.1;
   pilula(c, 700, 440, 480, "✓  GIT", g, fim(T), { cor: verde, borda: bd });
-  pilula(c, 1220, 440, 520, "✓  KIRO CLI", pal(2, /^Kiro/i) - 0.2, fim(T), { cor: verde, borda: bd });
+  pilula(c, 1220, 440, 520, "KIRO CLI  (opcional)", pal(2, /^Kiro/i) - 0.2, fim(T), { cor: navy2, borda: "#3b4660" });
 }
 
 export function cap3(c, T) {
   const { S, E, pal } = ctx(c, T);
   tituloCap(c, "PASSO 2", "CONFIGURAR", 0.3, fim(T));
-  const passos = ["1 Pré-requisitos", "2 Pasta", "3 Credencial", "4 Taiga", "5 Kiro"];
+  const passos = ["1 Pré-requisitos", "2 Pasta", "3 Credencial", "4 Kiro (opcional)", "5 Taiga (opcional)"];
   // pílulas pequenas no topo direito; estado por tempo
   passos.forEach((p, i) => {
     const x = 330 + i * 315, y = 235, t0 = S[0] + i * 0.15;
@@ -57,10 +57,10 @@ export function cap3(c, T) {
   const X = cx - w / 2 + 60, Y = cy - h / 2 + 110;
   let t0 = S[0] + 0.3, t1 = S[1] - 0.05;
   jan(t0, E(0) + 0.1, "Assistente de configuração");
-  c.texto("Cinco passos rápidos", 0, 0, { size: 34, cor: navy, caixa: [X, Y, 900, 60], t0: t0 + 0.2, t1: E(0) + 0.1, estilo: "Medium" });
+  c.texto("Cinco passos; só os três primeiros são obrigatórios", 0, 0, { size: 34, cor: navy, caixa: [X, Y, 900, 60], t0: t0 + 0.2, t1: E(0) + 0.1, estilo: "Medium" });
   // passo 1
   t0 = S[1] - 0.1; t1 = E(1) + 0.1; jan(t0, t1, "1 · Pré-requisitos");
-  ["Git  — encontrado", "Kiro CLI  — encontrado"].forEach((r, i) => { caixa(c, X + 20, Y + 30 + i * 90, r, t0 + 0.2 + i * 0.2, t1, t0 + 0.7 + i * 0.4, { size: 36 }); });
+  ["Git  — encontrado", "Kiro CLI  — opcional"].forEach((r, i) => { caixa(c, X + 20, Y + 30 + i * 90, r, t0 + 0.2 + i * 0.2, t1, t0 + 0.7 + i * 0.4, { size: 36 }); });
   // passo 2
   t0 = S[2] - 0.1; t1 = E(2) + 0.1; jan(t0, t1, "2 · Pasta dos projetos");
   campo(c, X, Y + 50, 760, "~/Projetos", t0 + 0.2, t1, { rotulo: "Pasta" });
@@ -70,22 +70,23 @@ export function cap3(c, T) {
   ["Token de acesso", "Chave SSH", "Git do sistema"].forEach((r, i) => caixa(c, X + 20, Y + 20 + i * 70, r, t0 + 0.2 + i * 0.15, t1, i === 2 ? t0 + 1 : undefined, { size: 34 }));
   botao(c, X + 720, Y + 90, 220, 76, "Testar", t0 + 0.4, t1, { cor: azul });
   c.texto("✓ funcionou", X + 720, Y + 168, { size: 32, cor: verde, fonte: "DejaVu Sans", t0: pal(3, /^cadastre/i) + 1.2, t1 });
-  // passo 4
-  t0 = S[4] - 0.1; t1 = E(4) + 0.1; jan(t0, t1, "4 · Conta do Taiga");
-  campo(c, X, Y + 50, 520, "ana.souza@exemplo.com", t0 + 0.2, t1, { rotulo: "Usuária" });
-  caixa(c, X + 20, Y + 150, "Selecionar todos", pal(4, /^importe/i) - 0.3, t1, pal(4, /^importe/i) + 0.5, { size: 32 });
-  ["Portal de Eventos", "Agenda Online"].forEach((r, i) => caixa(c, X + 20, Y + 210 + i * 56, r, pal(4, /^importe/i) - 0.2, t1, pal(4, /^importe/i) + 0.6 + i * 0.2, { size: 30 }));
-  const lx = X + 620, lt = pal(4, /^ligue/i) - 0.2;
-  campo(c, lx, Y + 50, 520, "portal-eventos", lt, t1, { rotulo: "Repositório" });
-  campo(c, lx, Y + 150, 520, "Portal de Eventos", lt + 0.3, t1, { rotulo: "Projeto" });
-  campo(c, lx, Y + 250, 520, "main", pal(4, /^branch/i) - 0.3, t1, { rotulo: "Branch" });
-  // passo 5
-  t0 = S[5] - 0.1; t1 = E(5) + 0.1; jan(t0, t1, "5 · Kiro");
+  // passo 4: Kiro (opcional)
+  t0 = S[4] - 0.1; t1 = E(4) + 0.1; jan(t0, t1, "4 · Kiro (opcional)");
   c.texto("Conectado como ana.souza@exemplo.com", 0, 0, { size: 36, cor: navy, caixa: [X, Y + 30, 1000, 60], t0: t0 + 0.2, t1 });
   c.texto("✓ logado", 0, 0, { size: 44, cor: verde, fonte: "DejaVu Sans", caixa: [X, Y + 110, 600, 70], t0: t0 + 1, t1 });
+  botao(c, X + 880, Y + 280, 220, 76, "Pular", t0 + 0.4, t1, { cor: "#d8cdb4", corTxt: navy });
+  // passo 5: Taiga (opcional, precisa do Kiro)
+  t0 = S[5] - 0.1; t1 = E(5) + 0.1; jan(t0, t1, "5 · Conta do Taiga (precisa do Kiro)");
+  campo(c, X, Y + 50, 520, "ana.souza@exemplo.com", t0 + 0.2, t1, { rotulo: "Usuária" });
+  caixa(c, X + 20, Y + 150, "Selecionar todos", pal(5, /^importe/i) - 0.3, t1, pal(5, /^importe/i) + 0.5, { size: 32 });
+  ["Portal de Eventos", "Agenda Online"].forEach((r, i) => caixa(c, X + 20, Y + 210 + i * 56, r, pal(5, /^importe/i) - 0.2, t1, pal(5, /^importe/i) + 0.6 + i * 0.2, { size: 30 }));
+  const lx = X + 620, lt = pal(5, /^ligue/i) - 0.2;
+  campo(c, lx, Y + 50, 520, "portal-eventos", lt, t1, { rotulo: "Repositório" });
+  campo(c, lx, Y + 150, 520, "Portal de Eventos", lt + 0.3, t1, { rotulo: "Projeto" });
+  campo(c, lx, Y + 250, 520, "main", pal(5, /^branch/i) - 0.3, t1, { rotulo: "Branch" });
   // fala 6: tudo certo + menu Configurações
   t0 = S[6] - 0.1; jan(t0, fim(T), "Tudo pronto");
-  ["Pré-requisitos", "Pasta", "Credencial", "Taiga", "Kiro"].forEach((r, i) => c.texto("✓  " + r, 0, 0, { size: 34, cor: verde, fonte: "DejaVu Sans", caixa: [X, Y + i * 52, 500, 50], t0: t0 + 0.2 + i * 0.12, t1: fim(T) }));
+  [["✓  Pré-requisitos", verde], ["✓  Pasta", verde], ["✓  Credencial", verde], ["○  Kiro (opcional)", "#9a8f77"], ["○  Taiga (opcional)", "#9a8f77"]].forEach(([r, k], i) => c.texto(r, 0, 0, { size: 34, cor: k, fonte: "DejaVu Sans", caixa: [X, Y + i * 52, 560, 50], t0: t0 + 0.2 + i * 0.12, t1: fim(T) }));
   c.forma("rounded", X + 760, Y + 120, 340, 80, azul, { raio: 40, t0: pal(6, /^Configura/i) - 0.5, t1: fim(T), borda: bd, bordaW: 4 });
   c.texto("Configurações", X + 760, Y + 120, { size: 34, cor: branco, t0: pal(6, /^Configura/i) - 0.45 });
   c.forma("rounded", X + 760, Y + 120, 380, 120, null, { raio: 60, t0: pal(6, /^Configura/i), t1: fim(T), borda: gold, bordaW: 6, de: 105 });

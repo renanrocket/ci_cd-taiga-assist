@@ -13,7 +13,8 @@ história aparece no Taiga com título, descrição e pontos.
 ## O que ele faz
 
 - **Pasta local:** escolha as branches do repositório, escreva a mensagem do commit e, com um clique, faça o
-  commit e o push. Com o Kiro e o Taiga configurados, o mesmo clique cria a US no Taiga (o Kiro escreve a descrição e os
+  commit e o push, e traga do remoto as branches desatualizadas com **Atualizar do remoto** (só fast-forward, sem merge).
+  Com o Kiro e o Taiga configurados, o mesmo clique cria a US no Taiga (o Kiro escreve a descrição e os
   pontos a partir do que mudou).
 - **Taiga US's:** liste as suas US, peça ao Kiro um resumo do que foi feito e do que ficou pendente (**Revisar e
   fechar**), confira os pontos e feche a US no Taiga.

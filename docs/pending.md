@@ -1,10 +1,10 @@
 # Pendências para o final
 
-Estado em 2026-11-07: app funcional, CI, publicação e vídeo prontos; `v0.2.0` publicada para Windows, macOS e Linux. Faltam os testes em máquina real (Windows e macOS).
+Estado em 2026-11-07: app funcional, CI, publicação e vídeo prontos; `v0.2.1` publicada para Windows, macOS e Linux. Faltam os testes em máquina real (Windows e macOS).
 
 ## Retomar aqui (2026-11-07)
 
-0. **Kiro e Taiga opcionais** publicado na `v0.2.0`. Falta **refazer o vídeo**, que mostra o assistente com os 5 passos
+0. **Kiro e Taiga opcionais** publicado desde a `v0.2.0`. Falta **refazer o vídeo**, que mostra o assistente com os 5 passos
    obrigatórios (só renderizar quando o autor pedir).
 
 O que **só uma pessoa/máquina real** resolve (nada disso dá para provar na CI):
@@ -60,5 +60,7 @@ O que **só uma pessoa/máquina real** resolve (nada disso dá para provar na CI
 - [x] Prazo da US (`prazo_dias`) tem tela em Configurações → Geral.
 
 ## Possíveis melhorias (depois do uso real)
+- [x] **"Atualizar do remoto" (git pull só fast-forward)** ao lado de cada branch desatualizada na Pasta local (`gitops::pull_branch`,
+      comando `update_branch`, 4 testes). Publicado na `v0.2.1`; o vídeo (cap. 4) pode citar o botão.
 - [ ] Editar/regerar o texto de um ponto do resumo antes de prestar conta (hoje só se regera pelo Kiro).
 - [ ] Mostrar na lista de US quantos pontos pendentes cada US tem.

@@ -5,7 +5,7 @@ com o Kiro CLI e manter o Taiga em dia (criar US, resumir US, prestar conta). Ir
 `~/Projetos/ci_cd` (de onde a lógica é portada). Cada pessoa instala e configura o seu.
 
 > Status (2026-11-07): **funcional e publicado** — assistente de configuração, Pasta local, Taiga US's (lista,
-> resumo, fechar, prestação de contas), atualização automática. **Release `v0.2.0` publicada para Linux (AppImage e
+> resumo, fechar, prestação de contas), atualização automática. **Release `v0.2.1` publicada para Linux (AppImage e
 > `.deb`), macOS (Apple Silicon e Intel) e Windows (`.exe`)**; falta testar o `.exe` e os `.dmg` em máquinas reais. Vídeo de apresentação 16:9 pronto (v2 e versão reduzida). Pendências e "retomar aqui":
 > [docs/pending.md](docs/pending.md).
 

@@ -60,17 +60,18 @@ export function cap1(c, T) {
   const dv = S[4] + 0.2;
   const ver = c.forma("rounded", px[1], bTop, 420, 110, verde, { raio: 55, t0: dv, t1: E(5) + 0.2, borda: bd, bordaW: 4, de: 96 });
   c.texto("✓  DEPLOY", px[1], bTop, { size: 42, cor: branco, t0: dv + 0.05, t1: E(5) + 0.2, fonte: "DejaVu Sans", estilo: "Bold" });
-  // ── fala 5: relatório vermelho, pilha de cartões, "até 2 h"
+  // ── fala 5: relatório vermelho, pilha de cartões, "2 h por semana"
+  // O logo entra em "por isso" (fala 6: "Acumulava tanto tempo que, por isso, criei o Taiga Assist.")
+  const g = pal(6, /^isso/i) - 0.25;
   const rv = pal(5, /^relat/i) - 0.2;
   c.corPorTempo(pil[2], "contents/group/contents/fill/color", rv, navy2, vermelho);
   for (let k = 0; k < 4; k++) {
-    c.forma("rounded", 760 + k * 40, 610 - k * 18, 420, 190, k % 2 ? "#efe6d3" : cream, { raio: 24, t0: rv + 0.1 + k * 0.12, t1: S[6] - 0.1, borda: bd, bordaW: 5 });
-    c.forma("rounded", 640 + k * 40, 600 - k * 18, 170, 20, "#c9bfa7", { raio: 10, t0: rv + 0.15 + k * 0.12, t1: S[6] - 0.1 });
+    c.forma("rounded", 760 + k * 40, 610 - k * 18, 420, 190, k % 2 ? "#efe6d3" : cream, { raio: 24, t0: rv + 0.1 + k * 0.12, t1: g, borda: bd, bordaW: 5 });
+    c.forma("rounded", 640 + k * 40, 600 - k * 18, 170, 20, "#c9bfa7", { raio: 10, t0: rv + 0.15 + k * 0.12, t1: g });
   }
-  c.texto("ATÉ 2 H", 1360, 580, { size: 120, cor: gold, borda: bd, bordaW: 14, t0: pal(5, /^at/i) - 0.1, t1: S[6] - 0.1 });
-  c.texto("POR SEMANA", 1360, 690, { size: 70, cor: branco, borda: bd, bordaW: 10, t0: pal(5, /^at/i) + 0.1, t1: S[6] - 0.1 });
+  c.texto("2 H", 1360, 580, { size: 120, cor: gold, borda: bd, bordaW: 14, t0: pal(5, /^duas/i) - 0.1, t1: g });
+  c.texto("POR SEMANA", 1360, 690, { size: 70, cor: branco, borda: bd, bordaW: 10, t0: pal(5, /^duas/i) + 0.1, t1: g });
   // ── fala 6: Taiga Assist
-  const g = S[6] - 0.1;
   c.forma("rounded", 560, 190, 150, 150, azul, { raio: 38, t0: g, borda: bd, bordaW: 6 });
   c.texto("T", 560, 192, { size: 120, cor: branco, t0: g + 0.05 });
   c.texto("Taiga Assist", 0, 0, { size: 130, cor: branco, caixa: [660, 120, 1100, 150], t0: g + 0.15, borda: bd, bordaW: 14 });

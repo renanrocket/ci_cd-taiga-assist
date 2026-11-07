@@ -45,6 +45,22 @@
   let confirmando = $state(false);
 
   const chave = (r: Repo, b: Branch) => `${r.rel}::${b.nome}`;
+
+  // "Atualizar do remoto" (git pull só fast-forward) de uma branch; recusa se divergiu ou se há conflito local.
+  let atualizando = $state<Record<string, boolean>>({});
+  async function atualizarBranch(r: Repo, b: Branch) {
+    const k = chave(r, b);
+    atualizando[k] = true;
+    erro = aviso = "";
+    try {
+      aviso = `${r.nome} · ${b.nome}: ` + (await invoke<string>("update_branch", { folderId: pastaId, rel: r.rel, branch: b.nome }));
+      await carregarRepos();
+    } catch (e) {
+      erro = `${r.nome} · ${b.nome}: ${e}`;
+    } finally {
+      atualizando[k] = false;
+    }
+  }
   const temTaiga = (r: Repo) => !!(r.projeto && r.branch_gatilho);
   // Relatório + US só existem com Kiro pronto E conta Taiga; senão o app faz só commit e push.
   const podeUs = $derived(capacidades.taigaPronto);
@@ -205,6 +221,21 @@
                 <span class="badge aviso" title="Será avançada (fast-forward) até a branch à frente, sem criar commit.">atrás de {b.atras_de.join(", ")}</span>
               {/if}
               {#if st && ESTADOS[st]}<span class="badge {ESTADOS[st].classe}" title={ESTADOS[st].dica}>{ESTADOS[st].texto}</span>{/if}
+              {#if st === "desatualizado"}
+                <button
+                  type="button"
+                  class="mini"
+                  disabled={r.cred_id === null || atualizando[chave(r, b)]}
+                  title="Traz os commits do remoto para esta branch (git pull, só fast-forward). Recusa se divergiu ou se alterações locais conflitam."
+                  onclick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    atualizarBranch(r, b);
+                  }}
+                >
+                  {atualizando[chave(r, b)] ? "Atualizando…" : "Atualizar do remoto"}
+                </button>
+              {/if}
             </label>
           {/each}
         </div>
@@ -269,6 +300,11 @@
 {/if}
 
 <style>
+  .mini {
+    flex: none;
+    padding: 3px 9px;
+    font-size: 0.78rem;
+  }
   .ramos {
     display: grid;
     gap: 6px;

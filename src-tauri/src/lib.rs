@@ -322,6 +322,7 @@ pub fn run() {
             cmd_local::set_prazo_dias,
             cmd_local::folder_overview,
             cmd_local::remote_states,
+            cmd_local::update_branch,
             cmd_local::start_commit,
             cmd_local::start_resend,
             cmd_local::list_tasks,

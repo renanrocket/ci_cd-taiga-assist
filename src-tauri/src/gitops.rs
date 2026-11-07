@@ -239,6 +239,42 @@ async fn sync_remote(git: &Path, dir: &Path, cred: Option<&RemoteCred>, env: &Au
     Ok(format!("Atualizada com o remoto (+{n} commit(s))."))
 }
 
+/// Atualiza `br` a partir do remoto **só por fast-forward** (o `git pull --ff-only` daquela branch), sem trocar de branch.
+/// Branch em checkout: `merge --ff-only` (o git recusa se alterações locais seriam sobrescritas). Outra branch: só move a
+/// referência. Se divergiu do remoto, recusa e orienta a resolver fora do app. Devolve a mensagem de resultado.
+pub async fn pull_branch(git: &Path, dir: &Path, cred: &RemoteCred, br: &str) -> Result<String, String> {
+    let url = git::remote_url(git, dir).await.ok_or("O repositório não tem remoto configurado.")?;
+    let auth = cred.auth(&url).map_err(|e| e.to_string())?;
+    let local = rev(git, dir, &format!("refs/heads/{br}")).await.ok_or_else(|| format!("A branch {br} não existe localmente."))?;
+    let f = git::run(git, Some(dir), &auth, &["fetch", &auth.url, &format!("refs/heads/{br}")], T_NET)
+        .await
+        .map_err(|_| "Falha ao buscar o remoto (tempo esgotado ou credencial).".to_string())?;
+    if !f.ok {
+        return Err(format!("Falha ao buscar o remoto: {}", msg(&f)));
+    }
+    let fetched = gl(git, dir, &["rev-parse", "FETCH_HEAD"]).await.stdout.trim().to_owned();
+    if fetched == local || is_ancestor(git, dir, &fetched, &local).await {
+        let a_frente = fetched != local;
+        return Ok(if a_frente { "Nada a atualizar: a branch local está à frente do remoto (o push resolve).".into() } else { "Já está em dia com o remoto.".into() });
+    }
+    if !is_ancestor(git, dir, &local, &fetched).await {
+        return Err("A branch divergiu do remoto (há commits dos dois lados): resolva manualmente com merge ou rebase.".into());
+    }
+    let n = gl(git, dir, &["rev-list", "--count", &format!("{local}..{fetched}")]).await.stdout.trim().to_owned();
+    if current_branch(git, dir).await.as_deref() == Some(br) {
+        let o = g(git, dir, &auth, &["merge", "--ff-only", &fetched], T_LONG).await;
+        if !o.ok {
+            return Err(format!("Não consegui atualizar (alterações locais podem conflitar): {}", msg(&o)));
+        }
+    } else {
+        let o = gl(git, dir, &["update-ref", "-m", "pull --ff-only", &format!("refs/heads/{br}"), &fetched, &local]).await;
+        if !o.ok {
+            return Err(format!("Não consegui atualizar a branch: {}", msg(&o)));
+        }
+    }
+    Ok(format!("Atualizada com o remoto (+{n} commit(s))."))
+}
+
 enum Rep {
     JaTem(String),
     Ok(String),
@@ -552,6 +588,68 @@ mod tests {
 
     fn noprog() -> impl Fn(String) + Send + Sync {
         |_| {}
+    }
+
+    /// Faz um commit novo direto no remoto (por um segundo clone), simulando um colega que deu push.
+    fn colega_envia(f: &Fx, branch: &str, arquivo: &str, texto: &str) {
+        let outro = f._t.path().join(format!("colega-{branch}-{arquivo}"));
+        sh(&f.git, f._t.path(), &["clone", "-q", f.bare.to_str().unwrap(), outro.to_str().unwrap()]);
+        sh(&f.git, &outro, &["config", "user.name", "Colega"]);
+        sh(&f.git, &outro, &["config", "user.email", "c@c.com"]);
+        sh(&f.git, &outro, &["checkout", "-q", branch]);
+        std::fs::write(outro.join(arquivo), texto).unwrap();
+        sh(&f.git, &outro, &["add", "."]);
+        sh(&f.git, &outro, &["commit", "-q", "-m", "do colega"]);
+        sh(&f.git, &outro, &["push", "-q", "origin", branch]);
+    }
+
+    #[tokio::test]
+    async fn pull_atualiza_a_branch_atual_por_fast_forward() {
+        let Some(f) = fixture() else { return };
+        colega_envia(&f, "develop", "novo.txt", "do colega\n");
+        let r = pull_branch(&f.git, &f.work, &f.cred, "develop").await;
+        assert!(r.as_ref().is_ok_and(|m| m.contains("+1 commit")), "{r:?}");
+        assert_eq!(std::fs::read_to_string(f.work.join("novo.txt")).unwrap().replace("\r\n", "\n"), "do colega\n");
+        assert_eq!(current_branch(&f.git, &f.work).await.as_deref(), Some("develop"));
+    }
+
+    #[tokio::test]
+    async fn pull_atualiza_outra_branch_sem_trocar_de_branch() {
+        let Some(f) = fixture() else { return };
+        std::fs::write(f.work.join("a.txt"), "sujo\n").unwrap(); // alteração local não atrapalha outra branch
+        colega_envia(&f, "prod", "p.txt", "p\n");
+        let antes = sh(&f.git, &f.work, &["rev-parse", "prod"]);
+        let r = pull_branch(&f.git, &f.work, &f.cred, "prod").await;
+        assert!(r.as_ref().is_ok_and(|m| m.contains("+1 commit")), "{r:?}");
+        assert_ne!(sh(&f.git, &f.work, &["rev-parse", "prod"]), antes);
+        assert_eq!(sh(&f.git, &f.work, &["rev-parse", "prod"]), sh(&f.git, &f.bare, &["rev-parse", "prod"]));
+        assert_eq!(current_branch(&f.git, &f.work).await.as_deref(), Some("develop"));
+        assert_eq!(std::fs::read_to_string(f.work.join("a.txt")).unwrap(), "sujo\n");
+    }
+
+    #[tokio::test]
+    async fn pull_recusa_quando_divergiu_e_nao_mexe_na_branch() {
+        let Some(f) = fixture() else { return };
+        colega_envia(&f, "develop", "x.txt", "remoto\n");
+        std::fs::write(f.work.join("y.txt"), "local\n").unwrap();
+        sh(&f.git, &f.work, &["add", "."]);
+        sh(&f.git, &f.work, &["commit", "-q", "-m", "local"]);
+        let antes = sh(&f.git, &f.work, &["rev-parse", "develop"]);
+        let r = pull_branch(&f.git, &f.work, &f.cred, "develop").await;
+        assert!(r.as_ref().is_err_and(|m| m.contains("divergiu")), "{r:?}");
+        assert_eq!(sh(&f.git, &f.work, &["rev-parse", "develop"]), antes);
+    }
+
+    #[tokio::test]
+    async fn pull_em_dia_ou_a_frente_nao_faz_nada() {
+        let Some(f) = fixture() else { return };
+        let r = pull_branch(&f.git, &f.work, &f.cred, "develop").await;
+        assert!(r.as_ref().is_ok_and(|m| m.contains("em dia")), "{r:?}");
+        std::fs::write(f.work.join("z.txt"), "z\n").unwrap();
+        sh(&f.git, &f.work, &["add", "."]);
+        sh(&f.git, &f.work, &["commit", "-q", "-m", "local"]);
+        let r = pull_branch(&f.git, &f.work, &f.cred, "develop").await;
+        assert!(r.as_ref().is_ok_and(|m| m.contains("à frente")), "{r:?}");
     }
 
     #[tokio::test]

@@ -153,6 +153,22 @@ pub async fn remote_states(
     Ok(states.into_iter().map(|(k, v)| (k, v.to_owned())).collect())
 }
 
+/// "Atualizar" uma branch a partir do remoto (git pull só fast-forward). Rápido: roda direto, sem tarefa em segundo plano.
+#[tauri::command]
+pub async fn update_branch(
+    app: AppHandle,
+    state: tauri::State<'_, AppState>,
+    folder_id: i64,
+    rel: String,
+    branch: String,
+) -> AppResult<String> {
+    let git = crate::git_bin(&state)?;
+    let dir = with_db(&state, |c| gitcreds::repo_path(c, folder_id, &rel))?;
+    let cfg = with_db(&state, |c| repo_cfg(c, folder_id, &rel))?;
+    let cred = load_cred(&app, &state, cfg.cred_id)?.ok_or_else(|| AppError::msg("Sem credencial para consultar o remoto."))?;
+    gitops::pull_branch(&git, &dir, &cred, &branch).await.map_err(AppError::msg)
+}
+
 #[derive(Deserialize)]
 pub struct CommitItem {
     pub rel: String,
