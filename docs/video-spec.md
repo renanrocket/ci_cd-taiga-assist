@@ -2,7 +2,7 @@
 
 > Especificação do vídeo (o quê e por quê). Tudo o que foi decidido em 2026-11-07 está aqui. **O vídeo 16:9 já foi
 > produzido**: o processo, os scripts e como refazer estão em [video-producao.md](video-producao.md); o estado final está
-> na seção 11 deste arquivo. A versão 9:16 ainda não foi feita.
+> na seção 11 deste arquivo. **A versão 9:16 foi descartada (2026-11-07): só existe a 16:9** (as menções ao 9:16 abaixo são histórico de planejamento).
 
 ## 1. Objetivo e público
 

@@ -58,7 +58,7 @@ npm run versao -- X.Y.Z           # atualiza a versão nos 3 arquivos (depois: c
 - [docs/spec.md](docs/spec.md) — especificação e mapa de portabilidade do `ci_cd`.
 - [docs/ui-conventions.md](docs/ui-conventions.md) — convenções de UI registradas.
 - [docs/atualizacoes.md](docs/atualizacoes.md) — instalação, atualização automática e chave de assinatura.
-- [docs/video-spec.md](docs/video-spec.md) — **spec do vídeo de apresentação** (vídeo único 9:16 + 16:9, roteiro, pipeline com EffectCraft).
+- [docs/video-spec.md](docs/video-spec.md) — **spec do vídeo de apresentação** (vídeo único 16:9; o 9:16 foi descartado, roteiro, pipeline com EffectCraft).
 - [docs/video-producao.md](docs/video-producao.md) — **como o vídeo é produzido**: roteiro → voz/pronúncia → vetores (`video/arte/`) → conferência por quadros (`revisar.sh`) → áudio/música → render (só quando o autor pedir).
 - [docs/pending.md](docs/pending.md) — pendências para o final (instalador, CI, testes em Windows/Mac).
 
