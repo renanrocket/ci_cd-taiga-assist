@@ -1,0 +1,28 @@
+# Confere em segundos se o Secret TAURI_SIGNING_PRIVATE_KEY está no formato certo (assina um arquivo de teste).
+# Dispara por "Run workflow" ou ao enviar a branch `validar-chave`. Não compila o app nem publica nada.
+name: Validar chave de assinatura
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [validar-chave]
+
+jobs:
+  validar:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci
+      - name: Assinar um arquivo de teste com o Secret
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          if [ -z "$TAURI_SIGNING_PRIVATE_KEY" ]; then echo "::error title=Secret vazio::TAURI_SIGNING_PRIVATE_KEY não está definido"; exit 1; fi
+          echo "Tamanho do Secret: ${#TAURI_SIGNING_PRIVATE_KEY} caracteres (o arquivo .key original tem 348)"
+          echo teste > teste.txt
+          if npx tauri signer sign teste.txt; then echo "::notice title=Chave OK::o Secret assina corretamente"; else echo "::error title=Chave inválida::o Secret não está no formato certo (esperado: exatamente o conteúdo do .key, 348 caracteres, sem quebra de linha)"; exit 1; fi
