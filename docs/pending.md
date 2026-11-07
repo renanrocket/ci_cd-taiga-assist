@@ -4,7 +4,7 @@ Estado em 2026-11-07: app funcional, CI, publicação e vídeo prontos; `v0.2.1`
 
 ## Retomar aqui (2026-11-07)
 
-0. **Kiro e Taiga opcionais** publicado desde a `v0.2.0`. O **vídeo v3 reduzido** já reflete isso (`video/out/taiga-assist-16x9-v3-reduzido.mp4`); falta publicar.
+0. **Kiro e Taiga opcionais** publicado desde a `v0.2.0`. O **vídeo v3** já reflete isso e está publicado (<https://youtu.be/7m5XXEiVybQ>).
 
 O que **só uma pessoa/máquina real** resolve (nada disso dá para provar na CI):
 1. **Windows real:** instalar o `.exe` da última Release e conferir (a CI roda 113 testes e gera o instalador, mas ninguém abriu o app).
@@ -12,7 +12,7 @@ O que **só uma pessoa/máquina real** resolve (nada disso dá para provar na CI
 3. **Colega no Linux** validando o AppImage: coletar o retorno. (O AppImage da `v0.1.1` já foi aberto na máquina do autor: inicia, cria o banco e fica rodando.)
 4. **Atualização automática:** publicar uma versão nova (ex.: `v0.1.2`) e abrir o app da anterior: aparece a faixa? Precisa de uma Release nova.
 5. **Taiga real**, **Kiro login**, **credenciais token/usuário+senha/SSH** contra remoto real (ver "Verificações" abaixo).
-6. **Vídeo:** publicar e pôr o link no README; depois 9:16, voz oficial (Azure, precisa da chave) e `video/musica-licencas.md` (precisa da origem da música).
+6. **Vídeo:** (v3 publicado e linkado no README); falta 9:16, voz oficial (Azure, precisa da chave) e `video/musica-licencas.md` (precisa da origem da música).
 
 ## Distribuição
 - [x] **CI de testes** (`.github/workflows/ci.yml`) nos 3 sistemas e **workflow de publicação**
@@ -44,7 +44,7 @@ O que **só uma pessoa/máquina real** resolve (nada disso dá para provar na CI
 - [ ] **Versão 9:16** (Instagram): falta desenhar o layout vertical de cada componente.
 - [ ] **Voz oficial** (Azure AI Speech), se o autor fornecer a chave; hoje a voz é do `edge-tts` (não oficial).
 - [ ] Registrar origem e licença da música em `video/musica-licencas.md`.
-- [ ] Publicar o vídeo e colocar o link no README.
+- [x] Vídeo v3 publicado (<https://youtu.be/7m5XXEiVybQ>) e linkado no README.
 
 ## Verificações que dependem de máquina/pessoa sem login
 - [ ] **Botão "Entrar no Kiro"** (login por código de dispositivo) nunca foi exercitado de verdade: o formato real da

@@ -3,6 +3,10 @@
 App desktop (Windows, macOS e Linux) para **fazer commit e push em lote, gerar o relatório com o Kiro CLI e manter o
 Taiga em dia**: criar a US da entrega, resumir e fechar US e prestar conta na reunião.
 
+## Vídeo de apresentação
+
+Veja em pouco mais de 3 minutos como instalar, configurar e usar: <https://youtu.be/7m5XXEiVybQ>
+
 ## Para que serve
 
 O fluxo de quem desenvolve era *programar → fazer o deploy → escrever o relatório no Taiga*. Com IA, programar ficou
