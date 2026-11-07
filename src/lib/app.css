@@ -1,0 +1,298 @@
+/* Estilos globais e componentes compartilhados.
+   Padronização: controles com a mesma função têm o mesmo estilo em todas as telas
+   (botão padrão, botão primário, botão perigoso, campo, item de lista, mensagem de erro). */
+
+:root {
+  --bg: #f6f7f9;
+  --card: #fff;
+  --texto: #1c2430;
+  --suave: #5b6675;
+  --borda: #d9dee5;
+  --ok: #1f8a4c;
+  --falha: #c0392b;
+  --aviso: #b7791f;
+  --acento: #2f6fed;
+  color-scheme: light dark;
+  color: var(--texto);
+  background: var(--bg);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14181f;
+    --card: #1d232d;
+    --texto: #e6eaf0;
+    --suave: #98a3b3;
+    --borda: #2e3744;
+    --ok: #4cc47f;
+    --falha: #ef6a5b;
+    --aviso: #e0b050;
+    --acento: #6a9bff;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+}
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+h1 {
+  margin: 0;
+}
+
+.sub {
+  color: var(--suave);
+  margin: 4px 0 24px;
+}
+
+.lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.item {
+  background: var(--card);
+  border: 1px solid var(--borda);
+  border-left: 4px solid var(--borda);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.item.ok {
+  border-left-color: var(--ok);
+}
+.item.falha {
+  border-left-color: var(--falha);
+}
+.item.aviso {
+  border-left-color: var(--aviso);
+}
+
+.cab {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.selo {
+  font-size: 0.8rem;
+}
+.item.ok .selo {
+  color: var(--ok);
+}
+.item.falha .selo {
+  color: var(--falha);
+}
+.item.aviso .selo {
+  color: var(--aviso);
+}
+
+.det {
+  color: var(--suave);
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  word-break: break-all;
+}
+
+.campo label:not(.marca) {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--suave);
+  margin-bottom: 4px;
+}
+.linha {
+  display: flex;
+  gap: 8px;
+}
+
+input:not([type="checkbox"]),
+select,
+textarea {
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--texto);
+}
+
+select option {
+  background: var(--card);
+  color: var(--texto);
+}
+
+textarea {
+  font-family: ui-monospace, monospace;
+  resize: vertical;
+}
+
+button {
+  padding: 8px 14px;
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--texto);
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+button.primario {
+  background: var(--acento);
+  border-color: var(--acento);
+  color: #fff;
+}
+button.perigo {
+  color: var(--falha);
+  border-color: var(--falha);
+}
+
+.acoes {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.erro {
+  color: var(--falha);
+}
+
+.vazio {
+  color: var(--suave);
+  text-align: center;
+  padding: 24px 0;
+}
+
+code {
+  font-size: 0.85em;
+}
+
+/* Selos (badges) — mesmo estilo em todas as telas */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid var(--borda);
+  color: var(--suave);
+  white-space: nowrap;
+}
+.badge.ok {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+.badge.falha {
+  color: var(--falha);
+  border-color: var(--falha);
+}
+.badge.aviso {
+  color: var(--aviso);
+  border-color: var(--aviso);
+}
+.badge.info {
+  color: var(--acento);
+  border-color: var(--acento);
+}
+
+/* Caixa "Selecionar todos" / caixas de seleção de lista */
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--texto);
+  margin: 0;
+  cursor: pointer;
+}
+.marca input {
+  flex: none;
+}
+
+main.largo {
+  max-width: 960px;
+}
+
+.abas {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--borda);
+  margin: 12px 0 20px;
+}
+.abas button {
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: none;
+  color: var(--suave);
+}
+.abas button.ativa {
+  color: var(--texto);
+  border-bottom-color: var(--acento);
+  font-weight: 600;
+}
+
+/* Configurações: menu lateral + formulário da seção escolhida */
+.config {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.menu {
+  display: grid;
+  gap: 2px;
+  position: sticky;
+  top: 16px;
+}
+.menu button {
+  text-align: left;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  color: var(--suave);
+  padding: 9px 12px;
+}
+.menu button:hover {
+  background: var(--card);
+}
+.menu button.ativa {
+  background: var(--card);
+  color: var(--texto);
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--acento);
+}
+.config h2.titulo {
+  margin: 0 0 4px;
+  font-size: 1.15rem;
+}
+@media (max-width: 700px) {
+  .config {
+    grid-template-columns: 1fr;
+  }
+  .menu {
+    position: static;
+    grid-auto-flow: column;
+    overflow-x: auto;
+  }
+}
+
+.sub-titulo {
+  margin: 28px 0 6px;
+  font-size: 1rem;
+}

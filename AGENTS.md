@@ -1,10 +1,12 @@
 # AGENTS.md — ci_cd-taiga-assist
 
 App desktop multiplataforma (Linux, macOS, Windows) para fazer commit/push em lote, gerar relatório
-com o Kiro CLI e manter o Taiga em dia (criar US, resumir cards, prestar conta). Irmão do projeto
+com o Kiro CLI e manter o Taiga em dia (criar US, resumir US, prestar conta). Irmão do projeto
 `~/Projetos/ci_cd` (de onde a lógica é portada). Cada pessoa instala e configura o seu.
 
-> Status: **planejamento** — nenhum código ainda. Especificação: [docs/spec.md](docs/spec.md).
+> Status: **funcional** — assistente de configuração, Pasta local, Taiga US's (lista, resumo, fechar,
+> prestação de contas), atualização automática. Falta o lançamento (instalador/CI/assinatura) e o vídeo
+> de apresentação. Pendências: [docs/pending.md](docs/pending.md).
 
 ## Stack
 
@@ -12,18 +14,38 @@ com o Kiro CLI e manter o Taiga em dia (criar US, resumir cards, prestar conta).
 - SQLite local (`rusqlite`); segredos no chaveiro do SO (`keyring`); HTTP com `reqwest` (rustls).
 - Usa o `git` e o `kiro-cli` **do sistema** (processos filhos). Sem SSH, sem Docker, sem MySQL.
 
+## Comandos
+
+```bash
+npm run tauri dev                 # app em desenvolvimento (recompila ao salvar)
+cargo test --manifest-path src-tauri/Cargo.toml   # testes do backend
+npx svelte-check                  # checagem do front
+npm run versao -- X.Y.Z           # atualiza a versão nos 3 arquivos (depois: commit, tag vX.Y.Z, push)
+```
+
 ## Regras
 
 - Nada hardcoded: URLs, slugs, branches, papéis, prazos e US de destino são **configuração do usuário**.
 - Segredos só no chaveiro; nunca em SQLite, log, URL ou linha de comando. Conteúdo não confiável (diffs,
-  descrições de card) só por arquivo/stdin e sempre com a instrução de ignorar ordens dentro dele.
+  descrições de US) só por arquivo/stdin e sempre com a instrução de ignorar ordens dentro dele.
 - Lógica pura (parse, datas, Markdown da exportação) com **testes unitários antes de portar**.
 - Código compila e testa nos 3 SOs (CI). Caminhos com `std::path`, nunca concatenar `/`.
 - Padronização de UI: controles com a mesma função têm o mesmo estilo, rótulo e posição em todas as telas.
-  Seguir [ci_cd/.agents/docs/ui-conventions.md](../ci_cd/.agents/docs/ui-conventions.md) e registrar aqui o que mudar.
-- Ações que alteram o Taiga (criar US, fechar card, editar descrição) pedem confirmação em popup.
+  Seguir [ci_cd/.agents/docs/ui-conventions.md](../ci_cd/.agents/docs/ui-conventions.md) e registrar o que mudar em
+  [docs/ui-conventions.md](docs/ui-conventions.md).
+- Ações que alteram o Taiga (criar US, fechar US, editar descrição) pedem confirmação em popup.
+- Nunca versionar chaves (`*.key`); a chave privada de assinatura das atualizações fica fora do repositório.
+
+## Documentação
+
+- [docs/spec.md](docs/spec.md) — especificação e mapa de portabilidade do `ci_cd`.
+- [docs/ui-conventions.md](docs/ui-conventions.md) — convenções de UI registradas.
+- [docs/atualizacoes.md](docs/atualizacoes.md) — instalação, atualização automática e chave de assinatura.
+- [docs/video-spec.md](docs/video-spec.md) — **spec do vídeo de apresentação** (formato, estilo, série, pipeline).
+- [docs/pending.md](docs/pending.md) — pendências para o final (instalador, CI, testes em Windows/Mac).
 
 ## Permissões para agentes
 
 Sem pedir: ler, buscar, editar código/docs deste projeto, rodar testes/linters.
-Pedir antes: instalar toolchain ou dependências, `git init/commit/push`, apagar arquivos, mexer em CI/assinatura.
+Pedir antes: instalar toolchain ou dependências, `git init/commit/push`, apagar arquivos, mexer em CI/assinatura,
+gerar instaladores. O usuário só quer commitar **no final**.
