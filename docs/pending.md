@@ -2,14 +2,15 @@
 
 Estado em 2026-11-07: app funcional, CI, publicação e vídeo prontos; `v0.1.1` publicada para Windows, macOS e Linux. Faltam os testes em máquina real (Windows e macOS).
 
-## Retomar aqui (fim da sessão de 2026-11-07)
+## Retomar aqui (2026-11-07)
 
-1. **Colega no Linux** validando o AppImage: coletar o retorno e corrigir na próxima versão.
-2. **Windows:** instalar o `.exe` da `v0.1.1` numa máquina Windows real e conferir (a CI só prova que compila, que os testes passam e que o instalador é gerado).
-3. **macOS:** testar o `.dmg` (Apple Silicon e Intel) num Mac real.
-4. **Vídeo:** publicar, colocar o link no README; depois 9:16, voz oficial (Azure) e `video/musica-licencas.md`.
-5. Os workflows usam `actions/checkout@v4`, `setup-node@v4` e `upload-artifact@v4` (aviso de Node 20 deprecado no GitHub): atualizar
-   quando houver versões novas.
+O que **só uma pessoa/máquina real** resolve (nada disso dá para provar na CI):
+1. **Windows real:** instalar o `.exe` da última Release e conferir (a CI roda 113 testes e gera o instalador, mas ninguém abriu o app).
+2. **macOS real:** abrir o `.dmg` (Apple Silicon e Intel).
+3. **Colega no Linux** validando o AppImage: coletar o retorno. (O AppImage da `v0.1.1` já foi aberto na máquina do autor: inicia, cria o banco e fica rodando.)
+4. **Atualização automática:** publicar uma versão nova (ex.: `v0.1.2`) e abrir o app da anterior: aparece a faixa? Precisa de uma Release nova.
+5. **Taiga real**, **Kiro login**, **credenciais token/usuário+senha/SSH** contra remoto real (ver "Verificações" abaixo).
+6. **Vídeo:** publicar e pôr o link no README; depois 9:16, voz oficial (Azure, precisa da chave) e `video/musica-licencas.md` (precisa da origem da música).
 
 ## Distribuição
 - [x] **CI de testes** (`.github/workflows/ci.yml`) nos 3 sistemas e **workflow de publicação**
@@ -19,16 +20,17 @@ Estado em 2026-11-07: app funcional, CI, publicação e vídeo prontos; `v0.1.1`
       GitHub (`TAURI_SIGNING_PRIVATE_KEY`, sem senha: decisão de 2026-11-07). Ver [atualizacoes.md](atualizacoes.md).
 - [x] **README** para colegas (para que serve, instalar, configurar), com resumo do vídeo.
 - [x] Revisão do `tauri.conf.json` (versões coerentes nos 3 arquivos, chave pública igual à do `.key.pub`, ícones,
-      categoria e descrição). Opcional, não feito: `longDescription`, `publisher`/`copyright` e
-      `webviewInstallMode` do Windows (hoje o padrão, que baixa o WebView2 se faltar).
+      categoria, descrição, `longDescription`, `publisher` e `copyright`). Opcional, não feito: `webviewInstallMode` do Windows
+      (hoje o padrão, que baixa o WebView2 se faltar).
 - [x] Workflow **Teste Windows** (`teste-windows.yml`): testes com falhas anotadas + instalador `.exe` como artefato, sem publicar.
 - [x] **Windows na `v0.1.1`**: job reativado em `release.yml`. O `cargo test` do Windows falhava com `0xc0000139` (o executável de
       teste da lib não tinha o manifesto Common Controls v6, exigido pelo `tauri-plugin-dialog`); corrigido com `RUSTFLAGS` só no
       passo de teste (`cargo test --lib`, manifesto em `src-tauri/windows-test.manifest`). **Não** usar `cargo:rustc-link-arg-tests`
       no `build.rs`: o cargo rejeita sem alvo de teste de integração e quebra o build. Um teste ajustado para CRLF (autocrlf do Git).
-- [ ] **Testar o `.exe` em um Windows real** (a CI roda 112 testes e gera o instalador, mas ninguém abriu o app ainda).
+- [ ] **Testar o `.exe` em um Windows real** (a CI roda 113 testes e gera o instalador, mas ninguém abriu o app ainda).
 - [x] **Primeira Release (`v0.1.0`)** publicada só com Linux e macOS (AppImage, .deb, 2 .dmg e o `latest.json`). Falta confirmar
       com o colega no Linux e testar num Mac real. O Windows entrou na `v0.1.1`.
+- [x] Actions atualizados para `checkout@v7`, `setup-node@v7`, `upload-artifact@v7` (fim do aviso de Node 20); CI verde nos 3 sistemas.
 - [ ] **Testar o instalador em Windows e macOS reais** e a atualização de uma versão para a seguinte (checklist em
       [atualizacoes.md](atualizacoes.md), seção 6). Só o `.deb` foi gerado localmente, como prova de empacotamento.
 - [ ] **Assinatura** do Windows (certificado de code signing, evita o SmartScreen) e do macOS (conta Apple
@@ -47,12 +49,12 @@ Estado em 2026-11-07: app funcional, CI, publicação e vídeo prontos; `v0.1.1`
       saída do `kiro-cli login --use-device-flow` não foi observado. Testar com quem ainda não está logado.
 - [ ] Testar credenciais **token / usuário+senha / chave SSH** contra um remoto real (só o modo "git do sistema" foi
       exercitado) e o `CodeCommit`.
-- [ ] Chave SSH temporária no **Windows** (sem `chmod`; o OpenSSH pode reclamar de permissões).
+- [x] Chave SSH temporária no **Windows**: teste `ssh_aceita_as_permissoes_da_chave_temporaria` gera uma chave com `ssh-keygen`, grava pelo caminho do app e confere que o `ssh` a carrega; passa nos 3 sistemas na CI. Falta só o uso contra um remoto SSH real.
 
 ## Funcionalidade
 - [x] **Taiga US's** (lista, resumo Kiro "Feito/Pendências", revisão, fechar em lote, prestação de contas e
       exportar para a US de destino digitada na hora) — implementado; falta o teste do usuário no Taiga real.
-- [ ] Prazo da US (`prazo_dias`) já tem tela em Configurações → Geral.
+- [x] Prazo da US (`prazo_dias`) tem tela em Configurações → Geral.
 
 ## Possíveis melhorias (depois do uso real)
 - [ ] Editar/regerar o texto de um ponto do resumo antes de prestar conta (hoje só se regera pelo Kiro).
