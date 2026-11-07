@@ -13,8 +13,9 @@ Tudo aqui fica para quando o app estiver **completo** (decisão do usuário: nad
 - [ ] Revisar `tauri.conf.json` (categoria, descrição curta/longa, `webviewInstallMode` no Windows).
 
 ## Vídeo de apresentação
-- [ ] Construir a série de vídeos (vertical 9:16, estilo motion design) seguindo [video-spec.md](video-spec.md):
-      responder as perguntas da seção 8 (licença do Remotion, voz, marca, música), depois kit da série + Parte 1.
+- [ ] Produzir o **vídeo único** (9:16 mestre + 16:9) seguindo [video-spec.md](video-spec.md), seção 9. Decisões
+      fechadas (motor EffectCraft, voz Francisca, marca "NTI Sistemas", música Pixabay); ambiente e MCPs já prontos.
+      Falta só: baixar o MP3 da música (opcional agora) e, se quiser a voz oficial, a chave do Azure.
 - [ ] O vídeo substitui o README dos colegas (decisão do autor): a explicação de instalação e atualização vai nele.
 
 ## Verificações que dependem de máquina/pessoa sem login

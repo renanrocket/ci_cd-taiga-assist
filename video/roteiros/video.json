@@ -1,0 +1,54 @@
+{
+  "voz": "pt-BR-FranciscaNeural",
+  "capitulos": [
+    {"id": 1, "nome": "O problema e o Taiga Assist", "falas": [
+      "Quanto tempo você perde escrevendo relatório?",
+      "No NTI Sistemas, o fluxo era: programar, fazer o deploy e gerar o relatório no Taiga.",
+      "Programar era o que mais demorava.",
+      "Mas com IA, programar ficou muito mais rápido.",
+      "E o deploy, a gente já está automatizando.",
+      "Sobrou o relatório: em semana cheia, até duas horas.",
+      "Por isso criei o Taiga Assist."
+    ]},
+    {"id": 2, "nome": "Instalar", "falas": [
+      "Baixe o instalador para o seu sistema: Windows, Mac ou Linux.",
+      "Na primeira abertura, o sistema pode avisar que o app não é assinado. É só confirmar.",
+      "Você só precisa ter o Git e o Kiro CLI instalados."
+    ]},
+    {"id": 3, "nome": "Configurar", "falas": [
+      "A configuração tem cinco passos.",
+      "Um: confira os pré-requisitos.",
+      "Dois: escolha a pasta onde ficam os seus projetos.",
+      "Três: cadastre como o app acessa os seus repositórios.",
+      "Quatro: entre na sua conta do Taiga, importe os projetos e ligue cada repositório a um projeto e a uma branch.",
+      "Cinco: entre no Kiro, que escreve os relatórios.",
+      "Pronto. E dá para mudar tudo depois, em Configurações."
+    ]},
+    {"id": 4, "nome": "Commit e push até a US", "falas": [
+      "No dia a dia, abra a Pasta local.",
+      "Marque as branches e escreva a mensagem do commit.",
+      "Deixe marcado: fazer push e criar a US no Taiga. Clique em Commitar.",
+      "O app envia o código, o Kiro lê as alterações e escreve o relatório.",
+      "E a história aparece no Taiga, com título, descrição e pontos."
+    ]},
+    {"id": 5, "nome": "Revisar e fechar", "falas": [
+      "Terminou a entrega? Vá em Taiga US's.",
+      "Marque a US e clique em Revisar e fechar. O Kiro resume o que foi feito.",
+      "Confira os pontos e confirme.",
+      "No Taiga, a US vai para a coluna final. Se o resumo já existe, é só clicar em Fechar."
+    ]},
+    {"id": 6, "nome": "Prestar conta", "falas": [
+      "Dia da reunião.",
+      "Em Prestar conta, marque os pontos que quer apresentar.",
+      "Clique em Prestar conta e exportar. O app pede o link da US da reunião.",
+      "Abra o navegador, vá ao quadro das reuniões, escolha a US com a data e o seu nome, e copie o link.",
+      "Volte ao Taiga Assist, cole o link e exporte.",
+      "Na US da reunião, seus itens já estão na descrição, sob Feito. Prestação de contas em segundos."
+    ]},
+    {"id": 7, "nome": "Atualizações e fechamento", "falas": [
+      "Quando sai uma versão nova, o app avisa.",
+      "Você escolhe: atualizar agora ou depois.",
+      "Taiga Assist. Menos relatório, mais código. Baixe pelo link."
+    ]}
+  ]
+}

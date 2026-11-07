@@ -22,3 +22,10 @@ vite.config.ts.timestamp-*
 video/out/
 video/node_modules/
 video/referencia/
+video/gerado/
+# SVGs do fundo: regerados por video/scripts/fundo.mjs
+video/arte/
+video/audio/
+*.ecproj
+video/.venv/
+__pycache__/
