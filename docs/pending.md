@@ -2,6 +2,18 @@
 
 Estado em 2026-11-07: app funcional, CI, publicação e vídeo prontos; falta a primeira Release e os testes em Windows/macOS.
 
+## Retomar aqui (fim da sessão de 2026-11-07)
+
+1. **Colar o texto da `v0.1.0`** na descrição da Release (Edit): tabela com links diretos (texto em [atualizacoes.md](atualizacoes.md), seção 3.1).
+2. **Commit e push** do que ficou só no disco: README com os links provisórios da `v0.1.0` e estes documentos.
+3. **Colega no Linux** validando o AppImage: coletar o retorno e corrigir na `v0.1.1`.
+4. **Windows:** corrigir o `cargo test` (próxima tentativa: `RUSTFLAGS` só no passo de teste, ver abaixo), reativar o job em
+   `release.yml`, testar o `.exe` pelo workflow Teste Windows numa máquina Windows e publicar a `v0.1.1`.
+5. **macOS:** testar o `.dmg` (Apple Silicon e Intel) num Mac real.
+6. **Vídeo:** publicar, colocar o link no README; depois 9:16, voz oficial (Azure) e `video/musica-licencas.md`.
+7. Os workflows usam `actions/checkout@v4`, `setup-node@v4` e `upload-artifact@v4` (aviso de Node 20 deprecado no GitHub): atualizar
+   quando houver versões novas.
+
 ## Distribuição
 - [x] **CI de testes** (`.github/workflows/ci.yml`) nos 3 sistemas e **workflow de publicação**
       (`.github/workflows/release.yml`): a tag `vX.Y.Z` gera `.exe` (Windows), `.dmg` (macOS Apple Silicon e Intel),

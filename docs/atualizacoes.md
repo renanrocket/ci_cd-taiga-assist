@@ -47,7 +47,37 @@ O repositório é público, então o próprio **GitHub Releases** serve os arqui
 A URL consultada pelos apps é
 `https://github.com/renanrocket/ci_cd-taiga-assist/releases/latest/download/latest.json`.
 
+### 3.1 Texto da Release e nomes dos arquivos
+
+O Tauri publica instaladores **e** arquivos técnicos do atualizador, com nomes próprios (espaços viram pontos):
+
+| Arquivo | Para quem |
+|---|---|
+| `Taiga.Assist_X.Y.Z_amd64.AppImage` | Linux (recomendado) |
+| `Taiga.Assist_X.Y.Z_amd64.deb` | Linux Debian/Ubuntu |
+| `Taiga.Assist_X.Y.Z_aarch64.dmg` | macOS Apple Silicon (M1 a M4) |
+| `Taiga.Assist_X.Y.Z_x64.dmg` | macOS Intel |
+| `Taiga.Assist_X.Y.Z_x64-setup.exe` | Windows (quando o job voltar) |
+| `*.sig`, `*.app.tar.gz`, `latest.json` | só o atualizador; o usuário não baixa |
+
+Não dá para esconder nem renomear os arquivos técnicos (o `latest.json` aponta para os nomes originais). Por isso o
+`release.yml` escreve no topo da Release uma **tabela "Sistema / Arquivo / Observação"** com links diretos. Na `v0.1.0` o texto
+foi colado à mão (Edit na Release). Quando o Windows voltar, trocar a linha "em breve" pelo link do `.exe`.
+
+### 3.2 Testar o Windows sem publicar e validar a chave
+- **Teste Windows** (`.github/workflows/teste-windows.yml`): roda os testes com todas as falhas como anotações
+  (`.github/scripts/anotar.py`) e gera o instalador como artefato `instalador-windows`. Dispara por "Run workflow" ou pelo push
+  de uma branch `teste-windows` (que deve ser apagada depois).
+- **Validar chave** (`.github/workflows/validar-chave.yml`): assina um arquivo de teste com o Secret (segundos). Dispara por
+  "Run workflow" ou pelo push de uma branch `validar-chave`.
+- Sem o GitHub CLI e sem login, o resultado dos runs de repositório público pode ser lido nas anotações da página do run.
+
 ## 4. Chave de assinatura das atualizações (importante)
+
+> **Armadilha vivida em 2026-11-07:** o Secret `TAURI_SIGNING_PRIVATE_KEY` tinha a chave **seguida de texto extra** e o build falhou
+> com `failed to decode secret key ... Invalid symbol 61, offset 346`. O Secret precisa ser **exatamente** o conteúdo do `.key`:
+> 348 caracteres, sem aspas, sem espaço e **sem quebra de linha** no fim (com `\n` o erro é "Invalid symbol 10, offset 348").
+> O arquivo local sempre estava correto. Confira com o workflow Validar chave antes de tagar.
 
 - É uma chave **própria do Tauri** (gratuita; não é a assinatura do Windows/Mac). Garante que só quem tem a
   chave privada consegue publicar atualizações aceitas pelos apps.
@@ -74,6 +104,8 @@ A URL consultada pelos apps é
 - O aviso só aparece com o app **aberto** (não há serviço em segundo plano).
 
 ## 6. Teste antes de prometer (checklist)
+
+> Estado (2026-11-07): `v0.1.0` publicada para Linux e macOS. **Em validação:** Linux (um colega). **Não testados:** macOS e Windows.
 
 Fazer **em cada sistema**, com uma máquina limpa se possível:
 

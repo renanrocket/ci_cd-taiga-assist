@@ -33,7 +33,9 @@ jobs:
         continue-on-error: true
         run: |
           set +e
-          cargo test --manifest-path src-tauri/Cargo.toml --no-fail-fast 2>&1 | tee teste.log
+          # O executável de teste da lib precisa do manifesto Common Controls v6 (o app real já o recebe do tauri-build).
+          export RUSTFLAGS="-C link-arg=/MANIFEST:EMBED -C link-arg=/MANIFESTINPUT:$(cygpath -m "$PWD/src-tauri/windows-test.manifest")"
+          cargo test --lib --manifest-path src-tauri/Cargo.toml --no-fail-fast 2>&1 | tee teste.log
           codigo=${PIPESTATUS[0]}
           python .github/scripts/anotar.py teste.log testes
           exit $codigo

@@ -35,4 +35,13 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npx svelte-check
-      - run: cargo test --manifest-path src-tauri/Cargo.toml
+      - name: Testes do backend
+        if: matrix.os != 'windows-latest'
+        run: cargo test --manifest-path src-tauri/Cargo.toml
+      - name: Testes do backend (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: |
+          # O executável de teste da lib precisa do manifesto Common Controls v6 (o app real já o recebe do tauri-build).
+          export RUSTFLAGS="-C link-arg=/MANIFEST:EMBED -C link-arg=/MANIFESTINPUT:$(cygpath -m "$PWD/src-tauri/windows-test.manifest")"
+          cargo test --lib --manifest-path src-tauri/Cargo.toml

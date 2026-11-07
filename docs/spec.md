@@ -158,6 +158,31 @@ Escrever os testes **antes** de portar, a partir do comportamento do Python:
 - **Fase 2 — Pasta local + Taiga (F1+F2):** commit/push em lote, relatório, US, reenvio.
 - **Fase 3 — Taiga US's leitura (F3 parte 1).**
 - **Fase 4 — Resumo + prestação + exportar + fechar (F3 parte 2).**
-- **Fase 5 — Empacotamento:** instaladores, auto-update, README para colegas.
+- **Fase 5 — Empacotamento:** instaladores, auto-update, README para colegas. **Feita em 2026-11-07** (ver seção 8),
+  exceto o Windows, que ficou para a `v0.1.1`.
 
 Ordem de risco: validar o ponto 2 (login do Kiro) e o ponto 1 (PATH) já na Fase 0, antes de investir no resto.
+
+## 8. Distribuição e lançamento (estado em 2026-11-07)
+
+**Decisões**
+1. **Distribuição por GitHub Releases** (repositório público): sem servidor. O app consulta
+   `.../releases/latest/download/latest.json`.
+2. **Atualização automática** com o plugin updater do Tauri e **chave própria** de assinatura (sem senha; o conteúdo do
+   `.key` vai no Secret `TAURI_SIGNING_PRIVATE_KEY`). Depois da primeira Release a chave **não pode mudar**.
+3. **Sem assinatura de sistema** (Windows/macOS): o aviso da primeira instalação é explicado no vídeo e no README.
+4. **Linux:** `.AppImage` (recomendado, atualiza sozinho) e `.deb` (só avisa). **macOS:** `.dmg` para Apple Silicon e para Intel.
+5. **Windows fora da `v0.1.0`**: o instalador `.exe` (NSIS) compila, mas o `cargo test` do Windows não inicia
+   (`STATUS_ENTRYPOINT_NOT_FOUND`: falta o manifesto Common Controls v6 no executável de teste). Entra na `v0.1.1`.
+6. **Apresentação da Release:** o Tauri publica 13 arquivos com nomes técnicos; renomear quebra o atualizador. A solução é o
+   **texto no topo da Release** com a tabela por sistema (gerado pelo `release.yml`; na `v0.1.0` colado à mão).
+
+**Resultado:** `v0.1.0` publicada com `Taiga.Assist_0.1.0_amd64.AppImage` e `.deb`, `_aarch64.dmg`, `_x64.dmg`, os `.sig`, os
+`.app.tar.gz` do atualizador e o `latest.json` (plataformas linux-x86_64 e darwin-aarch64/x86_64).
+
+**Critérios de aceite da distribuição (pendentes de máquina real):** instalar e abrir no Linux (colega validando), instalar no
+macOS Apple Silicon e Intel, atualizar de uma versão para a seguinte (só testável com a `v0.1.1`), e todo o ciclo no Windows.
+
+**Fluxo de qualidade do CI:** `ci.yml` roda os testes nos 3 sistemas a cada push em `prod` (Linux e macOS passam; Windows
+falha pelo motivo acima). Detalhes e lições em [atualizacoes.md](atualizacoes.md) e [pending.md](pending.md).
+

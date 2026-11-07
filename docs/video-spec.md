@@ -1,8 +1,8 @@
 # Vídeo de apresentação do Taiga Assist — spec
 
-> Documento para **construir o vídeo em outra sessão** (ou por outra pessoa). Tudo o que foi descoberto e
-> decidido em 2026-11-07 está aqui. Nenhum código de vídeo existe ainda: este arquivo é o ponto de partida.
-> Como retomar: ver a seção 10.
+> Especificação do vídeo (o quê e por quê). Tudo o que foi decidido em 2026-11-07 está aqui. **O vídeo 16:9 já foi
+> produzido**: o processo, os scripts e como refazer estão em [video-producao.md](video-producao.md); o estado final está
+> na seção 11 deste arquivo. A versão 9:16 ainda não foi feita.
 
 ## 1. Objetivo e público
 
@@ -408,3 +408,27 @@ ouvidas; o limite de duração dos Reels precisa ser conferido.
 
 Conferir que `ffmpeg` e `node` existem e que `~/.local/bin` está no PATH. Não commitar `video/arte/`, o vídeo de referência nem
 `video/out/`, `video/gerado/`, `video/audio/` ou `*.ecproj`.
+
+## 11. Estado final da produção (2026-11-07)
+
+**Feito (16:9, 1920×1080, 30 fps, ~181 s, 7 capítulos)**
+- Voz `pt-BR-FranciscaNeural` (edge-tts) com **tabela de pronúncia** em `video/roteiros/pronuncia.json` (guíti, quíro cí él ái,
+  deplói, púxi, brântchi, iúzer stóri, ene tê í...). As legendas mantêm o texto original; o tempo vem das palavras faladas.
+- Estilo aprovado: fundo Kanban escurecido com vinheta, **colunas animadas** (alternam sobe-e-desce, 26–38 px, ~21 s por ciclo),
+  títulos em caixa alta, pílulas, janelas do app/navegador/Taiga fictício, legendas com a palavra falada em laranja.
+- **Música:** o arquivo escolhido pelo autor (`zephiramusic-lofi-tech-588185.mp3`, 91 s), não as faixas do Pixabay da seção 2.4.
+  Em loop com transição de 3 s, fade-in de 1 s e **fade-out de 3 s no fim**; volume 0,13 com ducking sob a voz (≈13,5 dB abaixo).
+  Áudio final −14,2 LUFS, pico −1,5 dBFS.
+- Saídas em `video/out/`: `taiga-assist-16x9.mp4` (v1, 149 MB), `taiga-assist-16x9-v2.mp4` (119 MB, fundo animado e voz nova) e
+  `taiga-assist-16x9-v2-reduzido.mp4` (13,6 MB; H.264 CRF 22, VMAF 96,6 contra a v2).
+- Fluxo adotado: **preparar → conferir quadros (`revisar.sh`) → renderizar só quando o autor pedir**.
+
+**Mudanças em relação à spec original**
+- Só o **16:9** foi produzido (o autor pediu); o 9:16 virou pendência.
+- `video/arte/` **fica fora do git** (os SVGs são regerados por `fundo.mjs`); no git ficam só `video/roteiros/` e `video/scripts/`.
+- A produção usou a **CLI do EffectCraft**, `ffmpeg`, ImageMagick e `rsvg-convert`; as ferramentas MCP (EffectCraft/VectorCraft/
+  SoundCraft) **não foram usadas**. Expressões em `text/sourceText` não funcionam; texto digitado e legendas são camadas por passo.
+- No mock do vídeo "Prestar conta" aparece como item de menu; no app é uma **subaba de "Taiga US's"**.
+
+**Pendências do vídeo:** 9:16, voz oficial (Azure), `video/musica-licencas.md`, publicar e pôr o link no README.
+
