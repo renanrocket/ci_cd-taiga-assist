@@ -584,7 +584,8 @@ mod tests {
         assert_eq!(r.branches[0].status, "sem_alteracoes");
         // voltou para develop com os arquivos sujos intactos
         assert_eq!(current_branch(&f.git, &f.work).await.as_deref(), Some("develop"));
-        assert_eq!(std::fs::read_to_string(f.work.join("a.txt")).unwrap(), "sujo\n");
+        // o git do Windows pode converter LF em CRLF (core.autocrlf); o conteúdo é o mesmo
+        assert_eq!(std::fs::read_to_string(f.work.join("a.txt")).unwrap().replace("\r\n", "\n"), "sujo\n");
         assert!(f.work.join("novo.txt").exists());
         assert_eq!(dirty_count(&f.git, &f.work).await, 2);
     }
