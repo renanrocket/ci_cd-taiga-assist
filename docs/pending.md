@@ -8,9 +8,8 @@ Windows (instalador e app), login do Kiro, Taiga e atualização automática.
 O que ainda **só uma pessoa/máquina real** resolve:
 1. **macOS real:** abrir o `.dmg` (Apple Silicon e Intel).
 2. **Colega no Linux** validando o AppImage: coletar o retorno.
-3. **Credenciais token / usuário+senha / chave SSH** contra um remoto real, e o `CodeCommit` (só o modo "git do sistema" foi exercitado).
-4. **Vídeo:** voz oficial (Azure, precisa da chave) e `video/musica-licencas.md` (precisa da origem da música). A versão 9:16 foi descartada.
-5. Opcional: **assinatura** do Windows e do macOS (ver Distribuição).
+3. **Vídeo:** voz oficial (Azure, precisa da chave) e `video/musica-licencas.md` (precisa da origem da música). A versão 9:16 foi descartada.
+4. Opcional: **assinatura** do Windows e do macOS (ver Distribuição).
 
 ## Distribuição
 - [x] **CI de testes** (`.github/workflows/ci.yml`) nos 3 sistemas e **workflow de publicação**
@@ -46,9 +45,8 @@ O que ainda **só uma pessoa/máquina real** resolve:
 
 ## Verificações que dependem de máquina/pessoa sem login
 - [x] **Login do Kiro** testado de verdade: ok, confirmado pelo autor.
-- [ ] Testar credenciais **token / usuário+senha / chave SSH** contra um remoto real (só o modo "git do sistema" foi
-      exercitado) e o `CodeCommit`.
-- [x] Chave SSH temporária no **Windows**: teste `ssh_aceita_as_permissoes_da_chave_temporaria` gera uma chave com `ssh-keygen`, grava pelo caminho do app e confere que o `ssh` a carrega; passa nos 3 sistemas na CI. Falta só o uso contra um remoto SSH real.
+- [x] Credenciais **token / usuário+senha / chave SSH** contra remoto real: funcionando, confirmado pelo autor.
+- [x] Chave SSH temporária no **Windows**: teste `ssh_aceita_as_permissoes_da_chave_temporaria` gera uma chave com `ssh-keygen`, grava pelo caminho do app e confere que o `ssh` a carrega; passa nos 3 sistemas na CI. Uso contra remoto SSH real confirmado pelo autor.
 
 ## Funcionalidade
 - [x] **Taiga US's** (lista, resumo Kiro "Feito/Pendências", revisão, fechar em lote, prestação de contas e
