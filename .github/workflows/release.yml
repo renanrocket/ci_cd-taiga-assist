@@ -58,6 +58,11 @@ jobs:
 
       - run: npm ci
 
+      - name: Número da versão para o texto da Release
+        id: ver
+        shell: bash
+        run: echo "numero=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -66,7 +71,25 @@ jobs:
         with:
           tagName: ${{ github.ref_name }}
           releaseName: "Taiga Assist ${{ github.ref_name }}"
-          releaseBody: "Veja as novidades no histórico de commits desta versão. Instalação e atualização: docs/atualizacoes.md."
+          # Texto da página da Release: tabela "qual arquivo baixar" por sistema (os nomes seguem o padrão do Tauri).
+          # Quando o Windows voltar ao `matrix`, troque a linha "Windows" abaixo pelo link do .exe.
+          releaseBody: |
+            ## Baixe para o seu sistema
+
+            | Sistema | Arquivo | Observação |
+            |---|---|---|
+            | **Linux** | [AppImage](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/Taiga.Assist_${{ steps.ver.outputs.numero }}_amd64.AppImage) | Recomendado. Dê permissão (`chmod +x`) e abra. Atualiza sozinho. |
+            | **Linux (Debian/Ubuntu)** | [.deb](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/Taiga.Assist_${{ steps.ver.outputs.numero }}_amd64.deb) | Instala pelo gerenciador de pacotes. O app só avisa quando há versão nova. |
+            | **macOS, Apple Silicon (M1 a M4)** | [.dmg (aarch64)](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/Taiga.Assist_${{ steps.ver.outputs.numero }}_aarch64.dmg) | Macs com chip Apple. |
+            | **macOS, Intel** | [.dmg (x64)](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/Taiga.Assist_${{ steps.ver.outputs.numero }}_x64.dmg) | Macs com processador Intel. |
+            | **Windows** | _em breve_ | |
+
+            Não sabe qual Mac você tem? Menu Apple, "Sobre este Mac": "Chip Apple M..." é Apple Silicon; "Processador Intel" é Intel.
+
+            **Antes de usar:** tenha o Git e o Kiro CLI instalados. Na primeira abertura o sistema pode avisar que o app não é assinado; é só confirmar (macOS: Ajustes do Sistema, Privacidade e Segurança, "Abrir mesmo assim").
+
+            Os outros arquivos desta página (`.sig`, `.tar.gz` e `latest.json`) são do atualizador automático. Não precisa baixá-los.
+            Instalação e atualização: [docs/atualizacoes.md](https://github.com/${{ github.repository }}/blob/prod/docs/atualizacoes.md).
           releaseDraft: false
           prerelease: false
           args: ${{ matrix.args }}

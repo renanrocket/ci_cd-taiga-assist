@@ -14,10 +14,18 @@ Estado em 2026-11-07: app funcional, CI, publicação e vídeo prontos; falta a 
       `webviewInstallMode` do Windows (hoje o padrão, que baixa o WebView2 se faltar).
 - [x] Workflow **Teste Windows** (`teste-windows.yml`): testes com falhas anotadas + instalador `.exe` como artefato, sem publicar.
 - [ ] **Windows fora da `v0.1.0`** (job desativado em `release.yml`): reativar e publicar na `v0.1.1` depois de corrigir e testar.
+      Achados do workflow Teste Windows (2026-11-07):
+      1. **`cargo test` no Windows nem inicia** (`0xc0000139 STATUS_ENTRYPOINT_NOT_FOUND`): o executável de teste da lib não tem
+         o manifesto Common Controls v6 (o `tauri-plugin-dialog` usa `TaskDialogIndirect`). O app real não é afetado. A tentativa
+         `cargo:rustc-link-arg-tests` em `build.rs` **quebra o build** (o pacote não tem alvo de teste de integração): não usar.
+         Próxima tentativa: `RUSTFLAGS="-C link-arg=/MANIFEST:EMBED -C link-arg=/MANIFESTINPUT:<manifesto>"` só no passo do
+         `cargo test --lib` do Windows (manifesto: Common Controls 6.0.0.0, `publicKeyToken=6595b64144ccf1df`).
+      2. O **instalador `.exe` compila** (NSIS, ~4 MB); a falha anterior da assinatura foi só o Secret errado, já corrigido.
 - [ ] **CI do Windows falha no `cargo test`** (últimos pushes: Linux e macOS passam, e os 124 testes passam no Linux
       local). Abrir o log em Actions → Testes → windows-latest → "Run cargo test", achar o teste que falha e
       corrigir (suspeita: teste que assume caminhos/ambiente Unix).
-- [ ] **Primeira Release (`v0.1.0`)**: tag e push, conferir os 4 jobs e os arquivos publicados.
+- [x] **Primeira Release (`v0.1.0`)** publicada só com Linux e macOS (AppImage, .deb, 2 .dmg e o `latest.json`). Falta confirmar
+      com o colega no Linux e testar num Mac real. Windows entra na próxima versão.
 - [ ] **Testar o instalador em Windows e macOS reais** e a atualização de uma versão para a seguinte (checklist em
       [atualizacoes.md](atualizacoes.md), seção 6). Só o `.deb` foi gerado localmente, como prova de empacotamento.
 - [ ] **Assinatura** do Windows (certificado de code signing, evita o SmartScreen) e do macOS (conta Apple

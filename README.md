@@ -25,11 +25,18 @@ Toda ação que altera o Taiga (criar, fechar, editar descrição) pede confirma
 
 ## Instalar
 
-1. Baixe o instalador do seu sistema na página de versões:
+1. Baixe o arquivo do seu sistema na página de versões:
    **<https://github.com/renanrocket/ci_cd-taiga-assist/releases/latest>**
-   - Windows: arquivo `.exe`
-   - macOS: arquivo `.dmg` (Apple Silicon ou Intel, conforme o seu Mac)
-   - Linux: `.AppImage` (recomendado, atualiza sozinho) ou `.deb`
+
+   | Sistema | Arquivo | Observação |
+   |---|---|---|
+   | **Linux** | `.AppImage` | Recomendado: `chmod +x` e abrir. Atualiza sozinho. |
+   | **Linux (Debian/Ubuntu)** | `.deb` | Instala pelo apt; só avisa de versão nova. |
+   | **macOS, Apple Silicon (M1 a M4)** | `.dmg` com `aarch64` no nome | Macs com chip Apple. |
+   | **macOS, Intel** | `.dmg` com `x64` no nome | Macs com processador Intel. |
+   | **Windows** | `.exe` | Em breve. |
+
+   Os arquivos `.sig`, `.tar.gz` e `latest.json` são do atualizador automático; não precisa baixá-los.
 2. Na primeira abertura o sistema pode avisar que o app **não é assinado** (Windows SmartScreen, macOS Gatekeeper).
    É só confirmar ("Executar assim mesmo" / "Abrir mesmo assim"). As atualizações seguintes não repetem o aviso.
 3. Tenha instalados, à parte, o **Git** e o **Kiro CLI** (o app só confere se eles existem).
