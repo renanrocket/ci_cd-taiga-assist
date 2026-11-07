@@ -1,17 +1,14 @@
 # Pendências para o final
 
-Estado em 2026-11-07: app funcional, CI, publicação e vídeo prontos; falta a primeira Release e os testes em Windows/macOS.
+Estado em 2026-11-07: app funcional, CI, publicação e vídeo prontos; `v0.1.1` publicada para Windows, macOS e Linux. Faltam os testes em máquina real (Windows e macOS).
 
 ## Retomar aqui (fim da sessão de 2026-11-07)
 
-1. **Colar o texto da `v0.1.0`** na descrição da Release (Edit): tabela com links diretos (texto em [atualizacoes.md](atualizacoes.md), seção 3.1).
-2. **Commit e push** do que ficou só no disco: README com os links provisórios da `v0.1.0` e estes documentos.
-3. **Colega no Linux** validando o AppImage: coletar o retorno e corrigir na `v0.1.1`.
-4. **Windows:** corrigir o `cargo test` (próxima tentativa: `RUSTFLAGS` só no passo de teste, ver abaixo), reativar o job em
-   `release.yml`, testar o `.exe` pelo workflow Teste Windows numa máquina Windows e publicar a `v0.1.1`.
-5. **macOS:** testar o `.dmg` (Apple Silicon e Intel) num Mac real.
-6. **Vídeo:** publicar, colocar o link no README; depois 9:16, voz oficial (Azure) e `video/musica-licencas.md`.
-7. Os workflows usam `actions/checkout@v4`, `setup-node@v4` e `upload-artifact@v4` (aviso de Node 20 deprecado no GitHub): atualizar
+1. **Colega no Linux** validando o AppImage: coletar o retorno e corrigir na próxima versão.
+2. **Windows:** instalar o `.exe` da `v0.1.1` numa máquina Windows real e conferir (a CI só prova que compila, que os testes passam e que o instalador é gerado).
+3. **macOS:** testar o `.dmg` (Apple Silicon e Intel) num Mac real.
+4. **Vídeo:** publicar, colocar o link no README; depois 9:16, voz oficial (Azure) e `video/musica-licencas.md`.
+5. Os workflows usam `actions/checkout@v4`, `setup-node@v4` e `upload-artifact@v4` (aviso de Node 20 deprecado no GitHub): atualizar
    quando houver versões novas.
 
 ## Distribuição
@@ -25,19 +22,13 @@ Estado em 2026-11-07: app funcional, CI, publicação e vídeo prontos; falta a 
       categoria e descrição). Opcional, não feito: `longDescription`, `publisher`/`copyright` e
       `webviewInstallMode` do Windows (hoje o padrão, que baixa o WebView2 se faltar).
 - [x] Workflow **Teste Windows** (`teste-windows.yml`): testes com falhas anotadas + instalador `.exe` como artefato, sem publicar.
-- [ ] **Windows fora da `v0.1.0`** (job desativado em `release.yml`): reativar e publicar na `v0.1.1` depois de corrigir e testar.
-      Achados do workflow Teste Windows (2026-11-07):
-      1. **`cargo test` no Windows nem inicia** (`0xc0000139 STATUS_ENTRYPOINT_NOT_FOUND`): o executável de teste da lib não tem
-         o manifesto Common Controls v6 (o `tauri-plugin-dialog` usa `TaskDialogIndirect`). O app real não é afetado. A tentativa
-         `cargo:rustc-link-arg-tests` em `build.rs` **quebra o build** (o pacote não tem alvo de teste de integração): não usar.
-         Próxima tentativa: `RUSTFLAGS="-C link-arg=/MANIFEST:EMBED -C link-arg=/MANIFESTINPUT:<manifesto>"` só no passo do
-         `cargo test --lib` do Windows (manifesto: Common Controls 6.0.0.0, `publicKeyToken=6595b64144ccf1df`).
-      2. O **instalador `.exe` compila** (NSIS, ~4 MB); a falha anterior da assinatura foi só o Secret errado, já corrigido.
-- [ ] **CI do Windows falha no `cargo test`** (últimos pushes: Linux e macOS passam, e os 124 testes passam no Linux
-      local). Abrir o log em Actions → Testes → windows-latest → "Run cargo test", achar o teste que falha e
-      corrigir (suspeita: teste que assume caminhos/ambiente Unix).
+- [x] **Windows na `v0.1.1`**: job reativado em `release.yml`. O `cargo test` do Windows falhava com `0xc0000139` (o executável de
+      teste da lib não tinha o manifesto Common Controls v6, exigido pelo `tauri-plugin-dialog`); corrigido com `RUSTFLAGS` só no
+      passo de teste (`cargo test --lib`, manifesto em `src-tauri/windows-test.manifest`). **Não** usar `cargo:rustc-link-arg-tests`
+      no `build.rs`: o cargo rejeita sem alvo de teste de integração e quebra o build. Um teste ajustado para CRLF (autocrlf do Git).
+- [ ] **Testar o `.exe` em um Windows real** (a CI roda 112 testes e gera o instalador, mas ninguém abriu o app ainda).
 - [x] **Primeira Release (`v0.1.0`)** publicada só com Linux e macOS (AppImage, .deb, 2 .dmg e o `latest.json`). Falta confirmar
-      com o colega no Linux e testar num Mac real. Windows entra na próxima versão.
+      com o colega no Linux e testar num Mac real. O Windows entrou na `v0.1.1`.
 - [ ] **Testar o instalador em Windows e macOS reais** e a atualização de uma versão para a seguinte (checklist em
       [atualizacoes.md](atualizacoes.md), seção 6). Só o `.deb` foi gerado localmente, como prova de empacotamento.
 - [ ] **Assinatura** do Windows (certificado de code signing, evita o SmartScreen) e do macOS (conta Apple

@@ -36,12 +36,10 @@ mantém banco, credenciais e configurações.
    O workflow **recusa** a publicação se a tag não bater com a versão do app.
 4. Os apps instalados passam a ver a versão nova na próxima verificação.
 
-> **Estado atual (2026-11-07):** o job do **Windows está desativado** em `release.yml` (comentado) enquanto os testes do
-> Windows são corrigidos; a `v0.1.0` sai só com macOS e Linux. Para testar o Windows **sem publicar**, use o workflow
+> **Estado atual (2026-11-07):** a `v0.1.1` sai para Windows, macOS e Linux. Para testar o Windows **sem publicar**, use o workflow
 > **Teste Windows** (`.github/workflows/teste-windows.yml`): Actions → Teste Windows → Run workflow (ou envie a branch
 > `teste-windows`). Ele roda todos os testes (falhas viram anotações na página do run) e gera o instalador `.exe` como
-> artefato **instalador-windows** (baixar exige login no GitHub; vem num `.zip`). Quando o Windows estiver ok, reative a
-> linha no `release.yml` e publique a versão seguinte (ex.: `v0.1.1`).
+> artefato **instalador-windows** (baixar exige login no GitHub; vem num `.zip`).
 
 O repositório é público, então o próprio **GitHub Releases** serve os arquivos: não há servidor para manter.
 A URL consultada pelos apps é
@@ -57,12 +55,12 @@ O Tauri publica instaladores **e** arquivos técnicos do atualizador, com nomes 
 | `Taiga.Assist_X.Y.Z_amd64.deb` | Linux Debian/Ubuntu |
 | `Taiga.Assist_X.Y.Z_aarch64.dmg` | macOS Apple Silicon (M1 a M4) |
 | `Taiga.Assist_X.Y.Z_x64.dmg` | macOS Intel |
-| `Taiga.Assist_X.Y.Z_x64-setup.exe` | Windows (quando o job voltar) |
+| `Taiga.Assist_X.Y.Z_x64-setup.exe` | Windows |
 | `*.sig`, `*.app.tar.gz`, `latest.json` | só o atualizador; o usuário não baixa |
 
 Não dá para esconder nem renomear os arquivos técnicos (o `latest.json` aponta para os nomes originais). Por isso o
 `release.yml` escreve no topo da Release uma **tabela "Sistema / Arquivo / Observação"** com links diretos. Na `v0.1.0` o texto
-foi colado à mão (Edit na Release). Quando o Windows voltar, trocar a linha "em breve" pelo link do `.exe`.
+foi colado à mão (Edit na Release); a partir da `v0.1.1` é gerado pelo workflow, já com o link do `.exe`.
 
 ### 3.2 Testar o Windows sem publicar e validar a chave
 - **Teste Windows** (`.github/workflows/teste-windows.yml`): roda os testes com todas as falhas como anotações
@@ -105,7 +103,7 @@ foi colado à mão (Edit na Release). Quando o Windows voltar, trocar a linha "e
 
 ## 6. Teste antes de prometer (checklist)
 
-> Estado (2026-11-07): `v0.1.0` publicada para Linux e macOS. **Em validação:** Linux (um colega). **Não testados:** macOS e Windows.
+> Estado (2026-11-07): `v0.1.1` publicada para Linux, macOS e Windows. **Em validação:** Linux (um colega). **Não testados em máquina real:** macOS e Windows.
 
 Fazer **em cada sistema**, com uma máquina limpa se possível:
 

@@ -20,9 +20,7 @@ jobs:
           - { nome: "macOS (Apple Silicon)", os: macos-latest, rust_targets: "aarch64-apple-darwin,x86_64-apple-darwin", args: "--target aarch64-apple-darwin --bundles app,dmg" }
           - { nome: "macOS (Intel)", os: macos-latest, rust_targets: "aarch64-apple-darwin,x86_64-apple-darwin", args: "--target x86_64-apple-darwin --bundles app,dmg" }
           - { nome: "Linux (AppImage e .deb)", os: ubuntu-22.04, rust_targets: "", args: "--bundles appimage,deb" }
-          # Windows fora da v0.1.0 enquanto os testes do Windows são corrigidos (ver teste-windows.yml).
-          # Para voltar: reativar a linha abaixo.
-          # - { nome: "Windows", os: windows-latest, rust_targets: "", args: "--bundles nsis" }
+          - { nome: "Windows", os: windows-latest, rust_targets: "", args: "--bundles nsis" }
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -72,7 +70,6 @@ jobs:
           tagName: ${{ github.ref_name }}
           releaseName: "Taiga Assist ${{ github.ref_name }}"
           # Texto da página da Release: tabela "qual arquivo baixar" por sistema (os nomes seguem o padrão do Tauri).
-          # Quando o Windows voltar ao `matrix`, troque a linha "Windows" abaixo pelo link do .exe.
           releaseBody: |
             ## Baixe para o seu sistema
 
@@ -82,7 +79,7 @@ jobs:
             | **Linux (Debian/Ubuntu)** | [.deb](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/Taiga.Assist_${{ steps.ver.outputs.numero }}_amd64.deb) | Instala pelo gerenciador de pacotes. O app só avisa quando há versão nova. |
             | **macOS, Apple Silicon (M1 a M4)** | [.dmg (aarch64)](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/Taiga.Assist_${{ steps.ver.outputs.numero }}_aarch64.dmg) | Macs com chip Apple. |
             | **macOS, Intel** | [.dmg (x64)](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/Taiga.Assist_${{ steps.ver.outputs.numero }}_x64.dmg) | Macs com processador Intel. |
-            | **Windows** | _em breve_ | |
+            | **Windows** | [.exe (instalador)](https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/Taiga.Assist_${{ steps.ver.outputs.numero }}_x64-setup.exe) | Windows 10/11 (64 bits). Se aparecer o aviso do SmartScreen: "Mais informações", "Executar assim mesmo". |
 
             Não sabe qual Mac você tem? Menu Apple, "Sobre este Mac": "Chip Apple M..." é Apple Silicon; "Processador Intel" é Intel.
 

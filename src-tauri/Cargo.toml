@@ -1,6 +1,6 @@
 [package]
 name = "ci_cd-taiga-assist"
-version = "0.1.0"
+version = "0.1.1"
 description = "Commit em lote, relatório com Kiro e prestação de contas no Taiga"
 authors = ["Renan Rocha"]
 edition = "2024"

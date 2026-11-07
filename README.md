@@ -30,13 +30,13 @@ Toda ação que altera o Taiga (criar, fechar, editar descrição) pede confirma
 
    | Sistema | Arquivo | Observação |
    |---|---|---|
-   | **Linux** | [AppImage](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.0/Taiga.Assist_0.1.0_amd64.AppImage) | Recomendado: `chmod +x` e abrir. Atualiza sozinho. |
-   | **Linux (Debian/Ubuntu)** | [.deb](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.0/Taiga.Assist_0.1.0_amd64.deb) | Instala pelo apt; só avisa de versão nova. |
-   | **macOS, Apple Silicon (M1 a M4)** | [.dmg (aarch64)](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.0/Taiga.Assist_0.1.0_aarch64.dmg) | Macs com chip Apple. |
-   | **macOS, Intel** | [.dmg (x64)](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.0/Taiga.Assist_0.1.0_x64.dmg) | Macs com processador Intel. |
-   | **Windows** | _em breve_ | |
+   | **Linux** | [AppImage](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.1/Taiga.Assist_0.1.1_amd64.AppImage) | Recomendado: `chmod +x` e abrir. Atualiza sozinho. |
+   | **Linux (Debian/Ubuntu)** | [.deb](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.1/Taiga.Assist_0.1.1_amd64.deb) | Instala pelo apt; só avisa de versão nova. |
+   | **macOS, Apple Silicon (M1 a M4)** | [.dmg (aarch64)](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.1/Taiga.Assist_0.1.1_aarch64.dmg) | Macs com chip Apple. |
+   | **macOS, Intel** | [.dmg (x64)](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.1/Taiga.Assist_0.1.1_x64.dmg) | Macs com processador Intel. |
+   | **Windows** | [.exe (instalador)](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.1/Taiga.Assist_0.1.1_x64-setup.exe) | Windows 10/11 (64 bits). Se aparecer o SmartScreen: "Mais informações", "Executar assim mesmo". |
 
-   > Links **provisórios** da versão `0.1.0`. Versões mais novas: <https://github.com/renanrocket/ci_cd-taiga-assist/releases/latest>.
+   > Links da versão `0.1.1`. Versões mais novas: <https://github.com/renanrocket/ci_cd-taiga-assist/releases/latest>.
 
    Os arquivos `.sig`, `.tar.gz` e `latest.json` são do atualizador automático; não precisa baixá-los.
 2. Na primeira abertura o sistema pode avisar que o app **não é assinado** (Windows SmartScreen, macOS Gatekeeper).
