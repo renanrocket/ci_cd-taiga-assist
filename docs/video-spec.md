@@ -69,7 +69,7 @@
   CLI e servidor MCP** (`<app>-cli mcp`). O *launcher* não tem MCP; os apps instalados por ele têm. Não confundir
   com o "ArtCraft Studio" (geração de imagem/vídeo com IA, repositório storytold/artcraft).
 - **Instalado na máquina do autor (2026-11-07):** VectorCraft 0.22.0, PhotoCraft 0.21.0 e CADCraft 0.18.0 (**Flatpak**);
-  EffectCraft 0.22.0, FilmCraft 0.18.0, SoundCraft 0.18.0 e SolidCraft 0.30.1 (**AppImage** em `~/Applications/`).
+  EffectCraft 0.22.0, FilmCraft 0.18.0, SoundCraft 0.18.0 (**removido em 2026-11-07**, nunca usado: o áudio é feito com `ffmpeg`) e SolidCraft 0.30.1 (**AppImage** em `~/Applications/`).
 - **Ambiente preparado (2026-11-07), pronto para uso:**
   - AppImages **extraídos** em `~/.local/opt/craft/{effectcraft,filmcraft,soundcraft}/squashfs-root/` e **wrappers**
     em `~/.local/bin/{effectcraft,filmcraft,soundcraft,vectorcraft}-cli` (já ajustam o `LD_LIBRARY_PATH`; o do
@@ -123,7 +123,7 @@ que há.*
 **Decisão:** **EffectCraft é o motor principal.** A fonte da verdade são **scripts versionados** (JSONL/JSX) em
 `video/`; os projetos `.ecproj` são **gerados** a partir deles (fora do git). Para produção usar a **CLI diretamente**
 (previsível e versionável); o **MCP serve para exploração** com o Claude. Se o piloto 2 bloquear em algum item,
-usar o plano B (Revideo/Motion Canvas, MIT) mantendo VectorCraft (arte) e SoundCraft (áudio).
+usar o plano B (Revideo/Motion Canvas, MIT) mantendo VectorCraft (arte) e `ffmpeg` (áudio; o SoundCraft foi removido).
 O registro dos MCPs já foi feito com autorização do autor (ver acima).
 
 ### 2.5 Resultado do piloto 2 e da produção 16:9 (2026-11-07)
@@ -327,7 +327,7 @@ roteiro (video/roteiros/video.json)          ← capítulos, cenas, narração, 
    ├─ effectcraft-cli --empty --save-as out/video-9x16.ecproj run --commands gerado/video-9x16.jsonl   (idem 16x9)
    ├─ effectcraft-cli --project out/video-9x16.ecproj render --comp Video --out out/video-9x16.mp4 \
    │                  --format h264 --fps 30 --audio on                                               (idem 16x9)
-   └─ áudio: voz + música (ducking) mixados e normalizados (~−14 LUFS) com soundcraft-cli/ffmpeg; `+faststart`
+   └─ áudio: voz + música (ducking) mixados e normalizados (~−14 LUFS) com `ffmpeg` (o SoundCraft foi removido); `+faststart`
 ```
 
 - **Pasta:** `video/` na raiz do repositório: `roteiros/` (JSON), `scripts/` (gerador, TTS), `arte/` (SVG do fundo, regerado
