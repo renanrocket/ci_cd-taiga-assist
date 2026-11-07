@@ -35,23 +35,19 @@ jobs:
           set +e
           cargo test --manifest-path src-tauri/Cargo.toml --no-fail-fast 2>&1 | tee teste.log
           codigo=${PIPESTATUS[0]}
-          python - <<'PY'
-          import re
-          def esc(t): return t.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
-          def prop(t): return esc(t).replace(":", "%3A").replace(",", "%2C")
-          log = open("teste.log", encoding="utf-8", errors="replace").read()
-          blocos = re.findall(r"---- (\S+) stdout ----\n(.*?)(?=\n---- |\nfailures:\n|\Z)", log, re.S)
-          for nome, corpo in blocos:
-              print(f"::error title={prop('Teste falhou - ' + nome)}::{esc(corpo.strip()[:3500])}")
-          if not blocos and ("test result: FAILED" in log or "test result: ok" not in log):
-              print("::error title=cargo test falhou (sem teste identificado)::" + esc("\n".join(log.splitlines()[-40:])[:3500]))
-          print(f"Testes com falha: {len(blocos)}")
-          PY
+          python .github/scripts/anotar.py teste.log testes
           exit $codigo
 
       - name: Instalador do Windows (.exe)
+        id: instalador
         shell: bash
-        run: npx tauri build --bundles nsis
+        continue-on-error: true
+        run: |
+          set +e
+          npx tauri build --bundles nsis 2>&1 | tee build.log
+          codigo=${PIPESTATUS[0]}
+          [ $codigo -eq 0 ] || python .github/scripts/anotar.py build.log instalador
+          exit $codigo
         env:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
@@ -60,14 +56,16 @@ jobs:
         with:
           name: instalador-windows
           path: src-tauri/target/release/bundle/nsis/*.exe
-          if-no-files-found: error
+          if-no-files-found: warn
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: log-dos-testes
-          path: teste.log
+          path: |
+            teste.log
+            build.log
 
       - name: Falhar o run se algum teste falhou
-        if: steps.testes.outcome == 'failure'
+        if: steps.testes.outcome == 'failure' || steps.instalador.outcome == 'failure'
         run: exit 1
