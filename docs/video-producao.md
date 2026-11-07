@@ -3,7 +3,7 @@
 > Complementa [video-spec.md](video-spec.md) (o quê e por quê: roteiro, estilo, decisões). Este arquivo é o **como**:
 > o processo completo, do roteiro ao MP4, e como editar cada parte depois. Última atualização: 2026-11-07.
 > Estado: versão **16:9 v3** (7 capítulos, ~196 s; "2 h por semana", Kiro e Taiga opcionais) renderizada; **só a reduzida foi mantida**:
-> `video/out/taiga-assist-16x9-v3-reduzido.mp4` (~14,6 MB). Publicado e linkado no README; a versão 9:16 foi **descartada** (2026-11-07). Falta: voz oficial (Azure).
+> `video/out/taiga-assist-16x9-v3-reduzido.mp4` (~14,6 MB). Publicado e linkado no README; a versão 9:16 foi **descartada** (2026-11-07). Falta só registrar a origem e a licença da música (`video/musica-licencas.md`). A voz oficial (Azure) foi descartada.
 
 ## 1. Regra de ouro: preparar → conferir → renderizar
 
@@ -133,6 +133,6 @@ Para refazer só um capítulo: `node video/scripts/build.mjs <cap> 16x9`, `effec
 ## 6. Pendências
 1. **Render final** do 16:9 (aguardando o autor).
 2. ~~Versão 9:16~~ descartada pelo autor (2026-11-07); só existe `16x9`.
-3. **Voz oficial** (Azure AI Speech) se o autor fornecer a chave; hoje `edge-tts` (não oficial).
+3. ~~Voz oficial (Azure AI Speech)~~ descartada pelo autor (2026-11-07); a voz fica no `edge-tts`.
 4. Exportar os componentes de UI como SVG em `video/arte/` (se o autor quiser editá-los fora do código).
 5. `video/musica-licencas.md` com origem/licença da faixa usada.

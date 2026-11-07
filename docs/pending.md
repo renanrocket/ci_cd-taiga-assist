@@ -8,7 +8,7 @@ Windows (instalador e app), login do Kiro, Taiga e atualização automática.
 O que ainda **só uma pessoa/máquina real** resolve:
 1. **macOS real:** abrir o `.dmg` (Apple Silicon e Intel).
 2. **Colega no Linux** validando o AppImage: coletar o retorno.
-3. **Vídeo:** voz oficial (Azure, precisa da chave) e `video/musica-licencas.md` (precisa da origem da música). A versão 9:16 foi descartada.
+3. **Vídeo:** registrar a origem e a licença da música em `video/musica-licencas.md` (precisa da origem). A versão 9:16 e a voz oficial do Azure foram descartadas.
 4. Opcional: **assinatura** do Windows e do macOS (ver Distribuição).
 
 ## Distribuição
@@ -39,7 +39,7 @@ O que ainda **só uma pessoa/máquina real** resolve:
 - [x] **Vídeo único 16:9** produzido (v2 e versão reduzida, ~181 s), com voz Francisca, música em loop e fundo
       animado. Processo e scripts em [video-producao.md](video-producao.md); decisões em [video-spec.md](video-spec.md).
 - [x] ~~Versão 9:16~~ descartada: não faz mais parte do escopo.
-- [ ] **Voz oficial** (Azure AI Speech), se o autor fornecer a chave; hoje a voz é do `edge-tts` (não oficial).
+- [x] ~~Voz oficial (Azure)~~ descartada: o vídeo usa a voz do `edge-tts` (Francisca) e assim fica.
 - [ ] Registrar origem e licença da música em `video/musica-licencas.md`.
 - [x] Vídeo v3 publicado (<https://youtu.be/7m5XXEiVybQ>) e linkado no README.
 

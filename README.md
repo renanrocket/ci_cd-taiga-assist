@@ -5,7 +5,9 @@ Taiga em dia**: criar a US da entrega, resumir e fechar US e prestar conta na re
 
 ## Vídeo de apresentação
 
-Veja em pouco mais de 3 minutos como instalar, configurar e usar: <https://youtu.be/7m5XXEiVybQ>
+Veja em pouco mais de 3 minutos como instalar, configurar e usar (clique na imagem para assistir):
+
+[![Taiga Assist: vídeo de apresentação](https://img.youtube.com/vi/7m5XXEiVybQ/maxresdefault.jpg)](https://youtu.be/7m5XXEiVybQ)
 
 ## Para que serve
 
