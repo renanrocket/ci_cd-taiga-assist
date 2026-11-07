@@ -4,8 +4,7 @@ Estado em 2026-11-07: app funcional, CI, publicação e vídeo prontos; `v0.2.1`
 
 ## Retomar aqui (2026-11-07)
 
-0. **Kiro e Taiga opcionais** publicado desde a `v0.2.0`. Falta **refazer o vídeo**, que mostra o assistente com os 5 passos
-   obrigatórios (só renderizar quando o autor pedir).
+0. **Kiro e Taiga opcionais** publicado desde a `v0.2.0`. O **vídeo v3 reduzido** já reflete isso (`video/out/taiga-assist-16x9-v3-reduzido.mp4`); falta publicar.
 
 O que **só uma pessoa/máquina real** resolve (nada disso dá para provar na CI):
 1. **Windows real:** instalar o `.exe` da última Release e conferir (a CI roda 113 testes e gera o instalador, mas ninguém abriu o app).

@@ -2,7 +2,8 @@
 
 > Complementa [video-spec.md](video-spec.md) (o quê e por quê: roteiro, estilo, decisões). Este arquivo é o **como**:
 > o processo completo, do roteiro ao MP4, e como editar cada parte depois. Última atualização: 2026-11-07.
-> Estado: versão **16:9** com 7 capítulos (~181 s) pronta no gerador. Falta: render final, versão 9:16, voz oficial (Azure).
+> Estado: versão **16:9 v3** (7 capítulos, ~196 s; "2 h por semana", Kiro e Taiga opcionais) renderizada; **só a reduzida foi mantida**:
+> `video/out/taiga-assist-16x9-v3-reduzido.mp4` (~14,6 MB). Falta: publicar e pôr o link no README, versão 9:16, voz oficial (Azure).
 
 ## 1. Regra de ouro: preparar → conferir → renderizar
 
