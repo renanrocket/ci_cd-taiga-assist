@@ -323,6 +323,27 @@ mod tests {
         assert!(!path.exists(), "o arquivo da chave deve ser apagado");
     }
 
+    /// O OpenSSH recusa chave com permissões abertas ("UNPROTECTED PRIVATE KEY FILE"; no Windows, ACL com outros usuários).
+    /// Gera uma chave de verdade, passa pelo mesmo caminho do app e confere que o `ssh` a carrega (a conexão em si falha, de propósito).
+    #[test]
+    fn ssh_aceita_as_permissoes_da_chave_temporaria() {
+        let (Ok(keygen), Ok(ssh)) = (which::which("ssh-keygen"), which::which("ssh")) else { return };
+        let t = tempfile::tempdir().unwrap();
+        let k = t.path().join("k");
+        let ok = std::process::Command::new(keygen)
+            .args(["-q", "-t", "ed25519", "-N", "", "-f"]).arg(&k).status().unwrap().success();
+        assert!(ok, "ssh-keygen falhou");
+        let privada = std::fs::read_to_string(&k).unwrap();
+        let a = build_auth(Kind::SshKey, Some("git"), Some(&privada), "ssh://git@127.0.0.1:1/r.git", &kh()).unwrap();
+        let path = a._key_file.as_ref().unwrap().path().to_owned();
+        let out = std::process::Command::new(ssh)
+            .args(["-i"]).arg(&path)
+            .args(["-o", "IdentitiesOnly=yes", "-o", "BatchMode=yes", "-o", "ConnectTimeout=3", "-p", "1", "git@127.0.0.1", "exit"])
+            .output().unwrap();
+        let err = String::from_utf8_lossy(&out.stderr).to_lowercase();
+        assert!(!err.contains("unprotected") && !err.contains("bad permissions") && !err.contains("invalid format"), "{err}");
+    }
+
     #[test]
     fn sem_usuario_extra_quando_a_url_ja_tem_arroba() {
         let a = build_auth(Kind::SshKey, Some("git"), Some("k"), "git@h:o/r.git", &kh()).unwrap();

@@ -35,6 +35,9 @@
     "createUpdaterArtifacts": true,
     "category": "DeveloperTool",
     "shortDescription": "Commit em lote, relatório com Kiro e prestação de contas no Taiga",
+    "longDescription": "Faz commit e push em lote em várias pastas e branches, gera o relatório do dia com o Kiro CLI e mantém o Taiga em dia: cria e resume US e presta contas.",
+    "publisher": "Renan Rocha",
+    "copyright": "© 2026 Renan Rocha",
     "windows": {
       "nsis": {
         "installMode": "currentUser"
