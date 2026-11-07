@@ -18,7 +18,9 @@ item de lista, mensagem de erro). Tema claro/escuro por `prefers-color-scheme`.
 - **Teste de conexão:** botão **Testar** ao lado do campo que o configura; o resultado aparece no
   próprio cartão (borda verde = OK, vermelha = falhou) com a mensagem do erro abaixo.
 - **Navegação do assistente:** **Voltar** à esquerda, **Continuar** (primário) à direita; "Continuar"
-  desabilitado até o passo ter o mínimo necessário.
+  desabilitado até o passo ter o mínimo necessário. Em passo **opcional** (Kiro, Taiga) o mesmo botão, no mesmo lugar,
+  vira **Pular** (secundário, sem destaque) enquanto o passo não está configurado, e volta a **Continuar** (primário)
+  quando está. No último passo, "Concluir" / "Concluir sem Taiga".
 - **Selects:** opções estilizadas com as cores do tema (`select option` em `app.css`) e
   `color-scheme: light dark` na raiz, para a lista nativa não abrir branca no tema escuro.
 - **Confirmação** de ações que alteram dados externos (Taiga) em popup do app, nunca `alert`/`confirm`.
@@ -34,9 +36,15 @@ item de lista, mensagem de erro). Tema claro/escuro por `prefers-color-scheme`.
   telas que dependem do resultado recarregam quando a tarefa termina.
 - **Ícone do app:** `assets/icon.svg` (fonte) → `npx tauri icon assets/icon.svg` gera `src-tauri/icons/`
   (apagar as pastas `android/` e `ios/` geradas, o app é só desktop).
+- **Recurso que depende de outro (`Requisito.svelte`):** o controle fica **desabilitado, nunca escondido**, e um aviso
+  amarelo diz o que falta, com um botão que leva direto à configuração ("Configurar o Kiro", "Configurar o Taiga" →
+  Configurações na seção certa, via `nav.svelte.ts`). Quem decide é `capacidades.svelte.ts`: **base** = Git + pasta
+  (commit e push); **Kiro pronto** = binário achado e logado/API key; **Taiga pronto** = conta cadastrada **e** Kiro
+  pronto (o Taiga depende do Kiro). Vale para a caixa "Criar US" (Pasta local), a aba Taiga US's e o cadastro do Taiga.
 - **Criar US no Taiga (Pasta local):** um único checkbox **global**, logo abaixo de "Fazer push depois do
   commit", marcado por padrão, com tooltip. Desmarcado, nenhum relatório nem US é criado, mesmo com Taiga e
-  Kiro configurados. Depende do push (desabilitado sem push). Mesmo controle, rótulo e posição no `ci_cd`.
+  Kiro configurados. Depende do push (desabilitado sem push) e de Kiro + Taiga prontos (senão fica desabilitado, com o
+  aviso `Requisito`). Mesmo controle, rótulo e posição no `ci_cd`.
 - **Taiga US's:** aba própria entre "Pasta local" e "Configurações", com duas sub-abas iguais às do `ci_cd`:
   **User Stories (US)** e **Prestar conta em reunião** (com selo de pendentes). Filtros no topo da lista (projeto, origem,
   "Ocultar fechados", Atualizar), "Selecionar todos (desta página)" + botão primário **Revisar e fechar (N)**,

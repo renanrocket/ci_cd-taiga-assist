@@ -51,13 +51,17 @@ Item de prestação (card_items)      pontos "feito"/"pendência" por US; presta
 
 ### 2.2 Assistente do primeiro uso (wizard)
 
-Cada passo tem botão **Testar** e só avança com sucesso (ou "pular" onde for opcional).
+Cada passo tem botão **Testar** e só avança com sucesso. **Só os passos 1 a 3 são obrigatórios** (Git, pasta, credencial
+do repositório): com eles o app já faz commit e push em lote. **Kiro e Taiga são opcionais** (botão **Pular**) e podem ser
+ligados depois em Configurações. **O Taiga depende do Kiro**: sem o Kiro pronto, o cadastro do Taiga mostra um aviso com o
+botão "Configurar o Kiro". Relatório + US, resumo e prestação de contas só habilitam com Kiro **e** Taiga prontos
+(`capacidades.svelte.ts`); sem isso os controles ficam desabilitados com o motivo.
 
-1. **Pré-requisitos:** `git` e `kiro-cli` encontrados? Se não, mostra como instalar (link/comando por SO).
+1. **Pré-requisitos:** `git` (obrigatório) e `kiro-cli` (opcional) encontrados? Se não, mostra como instalar (link/comando por SO).
 2. **Pasta local** (≥1): seletor de pasta nativo; lista os repositórios achados.
 3. **Credencial do repositório** (git): token/usuário+senha/ssh, ou "usar o git do sistema". Teste = `git ls-remote`.
-4. **Taiga:** URL, usuário, senha. Teste = login. Depois: escolher projetos (lista vinda da API) e vincular repo → projeto + branch gatilho.
-5. **Kiro:** detecta o `kiro-cli`, mostra versão e se está logado; botão "Entrar" abre o login do Kiro (ou campo para API key). Teste = prompt trivial headless.
+4. **Kiro (opcional):** detecta o `kiro-cli`, mostra versão e se está logado; botão "Entrar" abre o login do Kiro (ou campo para API key). Teste = prompt trivial headless.
+5. **Taiga (opcional, precisa do Kiro):** URL, usuário, senha. Teste = login. Depois: escolher projetos (lista vinda da API) e vincular repo → projeto + branch gatilho.
 
 Tudo isso continua acessível depois em **Configurações** (mesmos formulários, mesmo estilo).
 

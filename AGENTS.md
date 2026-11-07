@@ -5,7 +5,7 @@ com o Kiro CLI e manter o Taiga em dia (criar US, resumir US, prestar conta). Ir
 `~/Projetos/ci_cd` (de onde a lógica é portada). Cada pessoa instala e configura o seu.
 
 > Status (2026-11-07): **funcional e publicado** — assistente de configuração, Pasta local, Taiga US's (lista,
-> resumo, fechar, prestação de contas), atualização automática. **Release `v0.1.1` publicada para Linux (AppImage e
+> resumo, fechar, prestação de contas), atualização automática. **Release `v0.2.0` publicada para Linux (AppImage e
 > `.deb`), macOS (Apple Silicon e Intel) e Windows (`.exe`)**; falta testar o `.exe` e os `.dmg` em máquinas reais. Vídeo de apresentação 16:9 pronto (v2 e versão reduzida). Pendências e "retomar aqui":
 > [docs/pending.md](docs/pending.md).
 
@@ -35,6 +35,9 @@ npm run versao -- X.Y.Z           # atualiza a versão nos 3 arquivos (depois: c
   Seguir [ci_cd/.agents/docs/ui-conventions.md](../ci_cd/.agents/docs/ui-conventions.md) e registrar o que mudar em
   [docs/ui-conventions.md](docs/ui-conventions.md).
 - Ações que alteram o Taiga (criar US, fechar US, editar descrição) pedem confirmação em popup.
+- **Kiro e Taiga são opcionais** (só Git + pasta são obrigatórios). O Taiga depende do Kiro. Recurso que depende de outro fica
+  **desabilitado com o motivo e um botão para configurar** (`src/lib/Requisito.svelte`, estado em `capacidades.svelte.ts`),
+  nunca escondido. Detalhes em [docs/ui-conventions.md](docs/ui-conventions.md).
 - Nunca versionar chaves (`*.key`); a chave privada de assinatura das atualizações fica fora do repositório.
 
 ## Distribuição (resumo; detalhes em docs/atualizacoes.md)

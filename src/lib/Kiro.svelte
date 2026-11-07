@@ -3,13 +3,21 @@
   import { openUrl } from "@tauri-apps/plugin-opener";
   import { onMount } from "svelte";
   import { tarefas } from "$lib/tasks.svelte";
+  import { capacidades } from "$lib/capacidades.svelte";
 
   let {
     onNext,
     onBack,
     rotuloProximo = "Continuar",
+    rotuloPular = "Pular",
     embutido = false,
-  }: { onNext?: () => void; onBack?: () => void; rotuloProximo?: string; embutido?: boolean } = $props();
+  }: {
+    onNext?: () => void;
+    onBack?: () => void;
+    rotuloProximo?: string;
+    rotuloPular?: string;
+    embutido?: boolean;
+  } = $props();
 
   type Status = {
     login: {
@@ -107,6 +115,9 @@
   });
 
   const pronto = $derived(!!status && (status.login.logged_in || status.api_key));
+  $effect(() => {
+    if (status) capacidades.definirKiroPronto(pronto);
+  });
 
   onMount(verificar);
 </script>
@@ -227,7 +238,7 @@ kiro-cli login --license pro --identity-provider https://SUA-EMPRESA.awsapps.com
 {#if !embutido}
   <div class="acoes">
     <button type="button" onclick={onBack}>Voltar</button>
-    <button type="button" class="primario" disabled={!pronto} onclick={onNext}>{rotuloProximo}</button>
+    <button type="button" class:primario={pronto} onclick={onNext}>{pronto ? rotuloProximo : rotuloPular}</button>
   </div>
 {/if}
 

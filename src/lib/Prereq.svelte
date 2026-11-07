@@ -1,6 +1,7 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
   import { onMount } from "svelte";
+  import { capacidades } from "$lib/capacidades.svelte";
 
   let { onNext, embutido = false }: { onNext?: () => void; embutido?: boolean } = $props();
 
@@ -14,7 +15,7 @@
     error: string | null;
   };
 
-  const NOMES: Record<string, string> = { git: "Git", kiro: "Kiro CLI" };
+  const NOMES: Record<string, string> = { git: "Git", kiro: "Kiro CLI (opcional)" };
 
   let tools = $state<ToolStatus[]>([]);
   let caminhos = $state<Record<string, string>>({});
@@ -26,6 +27,7 @@
     erro = "";
     try {
       tools = await invoke<ToolStatus[]>("check_prerequisites");
+      capacidades.definirFerramentas(tools);
       for (const t of tools) caminhos[t.tool] ??= t.custom ? (t.path ?? "") : "";
     } catch (e) {
       erro = String(e);
@@ -39,24 +41,33 @@
     try {
       const novo = await invoke<ToolStatus>("set_tool_path", { tool, path: caminhos[tool] ?? "" });
       tools = tools.map((t) => (t.tool === tool ? novo : t));
+      capacidades.definirFerramentas(tools);
     } catch (e) {
       erro = String(e);
     }
   }
 
-  const tudoOk = $derived(tools.length > 0 && tools.every((t) => t.found));
+  // Só o Git é obrigatório. Sem o Kiro CLI o app faz commit e push em lote; com ele (e o Taiga) gera relatórios e US.
+  const gitOk = $derived(tools.some((t) => t.tool === "git" && t.found));
 
   onMount(verificar);
 </script>
 
 {#if erro}<p class="erro" role="alert">{erro}</p>{/if}
 
+{#if !embutido}
+  <p class="det" style="margin-top: 0">
+    Só o <strong>Git</strong> é obrigatório: com ele você já faz commit e push em lote. O <strong>Kiro CLI</strong> é opcional e libera
+    os relatórios e a integração com o Taiga; dá para instalar e configurar depois.
+  </p>
+{/if}
+
 <ul class="lista">
   {#each tools as t (t.tool)}
-    <li class="item" class:ok={t.found} class:falha={!t.found}>
+    <li class="item" class:ok={t.found} class:falha={!t.found && t.tool === "git"} class:aviso={!t.found && t.tool !== "git"}>
       <div class="cab">
         <strong>{NOMES[t.tool]}</strong>
-        <span class="selo">{t.found ? "encontrado" : "não encontrado"}</span>
+        <span class="selo">{t.found ? "encontrado" : t.tool === "git" ? "não encontrado" : "não encontrado (opcional)"}</span>
       </div>
       {#if t.found}
         <p class="det">{t.version} — <code>{t.path}</code></p>
@@ -87,7 +98,7 @@
     {carregando ? "Verificando…" : "Verificar novamente"}
   </button>
   {#if !embutido}
-    <button type="button" class="primario" disabled={!tudoOk} onclick={onNext}>Continuar</button>
+    <button type="button" class="primario" disabled={!gitOk} onclick={onNext}>Continuar</button>
   {:else}
     <span></span>
   {/if}

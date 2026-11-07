@@ -9,6 +9,7 @@
   import Prereq from "$lib/Prereq.svelte";
   import Taiga from "$lib/Taiga.svelte";
   import { atualizacao } from "$lib/atualizacao.svelte";
+  import { nav } from "$lib/nav.svelte";
 
   const SECOES = [
     { id: "geral", nome: "Geral" },
@@ -21,6 +22,13 @@
 
   let secao = $state<(typeof SECOES)[number]["id"]>("geral");
   const atual = $derived(SECOES.find((s) => s.id === secao)!);
+  // Botões "Configurar o Kiro/Taiga" de outras telas pedem uma seção específica.
+  $effect(() => {
+    if (nav.secaoPedida) {
+      secao = nav.secaoPedida;
+      nav.secaoPedida = null;
+    }
+  });
 
   // Geral
   let prazo = $state("15");

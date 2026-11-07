@@ -9,19 +9,20 @@
   import Prereq from "$lib/Prereq.svelte";
   import TaigaCards from "$lib/TaigaCards.svelte";
   import Taiga from "$lib/Taiga.svelte";
+  import { capacidades } from "$lib/capacidades.svelte";
+  import { nav } from "$lib/nav.svelte";
 
   const PASSOS = [
     "Pré-requisitos",
     "Pasta local",
     "Credencial do repositório",
-    "Taiga",
-    "Kiro",
+    "Kiro (opcional)",
+    "Taiga (opcional, precisa do Kiro)",
   ];
 
   let pronto = $state(false); // já leu do banco se o assistente foi concluído
   let concluido = $state(false);
   let passo = $state(0);
-  let aba = $state<"pasta" | "cards" | "config">("pasta");
 
   const proximo = () => (passo = Math.min(passo + 1, PASSOS.length - 1));
   const anterior = () => (passo = Math.max(passo - 1, 0));
@@ -29,6 +30,7 @@
   async function concluir() {
     await invoke("set_wizard_done", { done: true });
     concluido = true;
+    capacidades.atualizar();
   }
 
   onMount(async () => {
@@ -47,13 +49,13 @@
     <p class="sub">Carregando…</p>
   {:else if concluido}
     <nav class="abas" aria-label="Seções">
-      <button type="button" class:ativa={aba === "pasta"} onclick={() => (aba = "pasta")}>Pasta local</button>
-      <button type="button" class:ativa={aba === "cards"} onclick={() => (aba = "cards")}>Taiga US's</button>
-      <button type="button" class:ativa={aba === "config"} onclick={() => (aba = "config")}>Configurações</button>
+      <button type="button" class:ativa={nav.aba === "pasta"} onclick={() => nav.ir("pasta")}>Pasta local</button>
+      <button type="button" class:ativa={nav.aba === "cards"} onclick={() => nav.ir("cards")}>Taiga US's</button>
+      <button type="button" class:ativa={nav.aba === "config"} onclick={() => nav.ir("config")}>Configurações</button>
     </nav>
-    {#if aba === "pasta"}
+    {#if nav.aba === "pasta"}
       <PastaLocal />
-    {:else if aba === "cards"}
+    {:else if nav.aba === "cards"}
       <TaigaCards />
     {:else}
       <Configuracoes />
@@ -68,9 +70,9 @@
     {:else if passo === 2}
       <Credencial onNext={proximo} onBack={anterior} />
     {:else if passo === 3}
-      <Taiga onNext={proximo} onBack={anterior} />
+      <Kiro onNext={proximo} onBack={anterior} />
     {:else}
-      <Kiro onNext={concluir} onBack={anterior} rotuloProximo="Concluir" />
+      <Taiga onNext={concluir} onBack={anterior} rotuloProximo="Concluir" rotuloPular="Concluir sem Taiga" irKiro={() => (passo = 3)} />
     {/if}
   {/if}
 </main>

@@ -13,7 +13,8 @@ história aparece no Taiga com título, descrição e pontos.
 ## O que ele faz
 
 - **Pasta local:** escolha as branches do repositório, escreva a mensagem do commit e, com um clique, faça o
-  commit, o push e crie a US no Taiga (o Kiro escreve a descrição e os pontos a partir do que mudou).
+  commit e o push. Com o Kiro e o Taiga configurados, o mesmo clique cria a US no Taiga (o Kiro escreve a descrição e os
+  pontos a partir do que mudou).
 - **Taiga US's:** liste as suas US, peça ao Kiro um resumo do que foi feito e do que ficou pendente (**Revisar e
   fechar**), confira os pontos e feche a US no Taiga.
 - **Prestar conta em reunião:** marque os pontos que quer apresentar e exporte direto para a US da reunião, que recebe
@@ -28,29 +29,34 @@ Toda ação que altera o Taiga (criar, fechar, editar descrição) pede confirma
 1. Baixe o arquivo do seu sistema na página de versões:
    **<https://github.com/renanrocket/ci_cd-taiga-assist/releases/latest>**
 
-   | Sistema | Arquivo | Observação |
+   | Sistema | Qual arquivo baixar | Observação |
    |---|---|---|
-   | **Linux** | [AppImage](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.1/Taiga.Assist_0.1.1_amd64.AppImage) | Recomendado: `chmod +x` e abrir. Atualiza sozinho. |
-   | **Linux (Debian/Ubuntu)** | [.deb](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.1/Taiga.Assist_0.1.1_amd64.deb) | Instala pelo apt; só avisa de versão nova. |
-   | **macOS, Apple Silicon (M1 a M4)** | [.dmg (aarch64)](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.1/Taiga.Assist_0.1.1_aarch64.dmg) | Macs com chip Apple. |
-   | **macOS, Intel** | [.dmg (x64)](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.1/Taiga.Assist_0.1.1_x64.dmg) | Macs com processador Intel. |
-   | **Windows** | [.exe (instalador)](https://github.com/renanrocket/ci_cd-taiga-assist/releases/download/v0.1.1/Taiga.Assist_0.1.1_x64-setup.exe) | Windows 10/11 (64 bits). Se aparecer o SmartScreen: "Mais informações", "Executar assim mesmo". |
+   | **Linux** | `.AppImage` | Recomendado: `chmod +x` e abrir. Atualiza sozinho. |
+   | **Linux (Debian/Ubuntu)** | `.deb` | Instala pelo apt; só avisa de versão nova. |
+   | **macOS, Apple Silicon (M1 a M4)** | `.dmg` com `aarch64` no nome | Macs com chip Apple. |
+   | **macOS, Intel** | `.dmg` com `x64` no nome | Macs com processador Intel. |
+   | **Windows** | `.exe` (`x64-setup`) | Windows 10/11 (64 bits). |
 
-   > Links da versão `0.1.1`. Versões mais novas: <https://github.com/renanrocket/ci_cd-taiga-assist/releases/latest>.
+   A página de cada versão traz uma tabela no topo com o arquivo certo para cada sistema.
 
    Os arquivos `.sig`, `.tar.gz` e `latest.json` são do atualizador automático; não precisa baixá-los.
 2. Na primeira abertura o sistema pode avisar que o app **não é assinado** (Windows SmartScreen, macOS Gatekeeper).
    É só confirmar ("Executar assim mesmo" / "Abrir mesmo assim"). As atualizações seguintes não repetem o aviso.
-3. Tenha instalados, à parte, o **Git** e o **Kiro CLI** (o app só confere se eles existem).
+3. Tenha o **Git** instalado (obrigatório). O **Kiro CLI** é opcional: sem ele o app faz commit e push em lote; com ele
+   (e com o Taiga) gera os relatórios e as US.
 
-## Configurar (cinco passos, na primeira abertura)
+## Configurar (na primeira abertura)
 
-1. **Pré-requisitos:** confira se o Git e o Kiro CLI foram encontrados.
+Só os três primeiros passos são obrigatórios; com eles você já faz **commit e push em lote**. Kiro e Taiga podem ser
+pulados e ligados depois em **Configurações**. O Taiga precisa do Kiro (os relatórios e resumos são gerados por ele).
+
+1. **Pré-requisitos:** confira se o Git foi encontrado (o Kiro CLI é opcional).
 2. **Pasta local:** escolha a pasta onde ficam os seus projetos.
 3. **Credencial do repositório:** cadastre como o app acessa os repositórios (token, chave SSH ou o Git do sistema) e
    clique em **Testar**.
-4. **Taiga:** entre na sua conta, importe os projetos e ligue cada repositório a um projeto e a uma branch.
-5. **Kiro:** entre no Kiro, que escreve os relatórios.
+4. **Kiro (opcional):** entre no Kiro, que escreve os relatórios.
+5. **Taiga (opcional, precisa do Kiro):** entre na sua conta, importe os projetos e ligue cada repositório a um projeto
+   e a uma branch.
 
 Tudo pode ser mudado depois em **Configurações**. Nada fica fixo no código: URLs, branches, papéis, prazos e a US de
 destino são configuração de cada pessoa. Segredos ficam só no chaveiro do sistema.

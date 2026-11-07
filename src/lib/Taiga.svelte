@@ -1,12 +1,26 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
   import { onMount } from "svelte";
+  import Requisito from "$lib/Requisito.svelte";
+  import { capacidades } from "$lib/capacidades.svelte";
+  import { nav } from "$lib/nav.svelte";
 
   let {
     onNext,
     onBack,
+    rotuloProximo = "Continuar",
+    rotuloPular = "Pular",
+    irKiro,
     embutido = false,
-  }: { onNext?: () => void; onBack?: () => void; embutido?: boolean } = $props();
+  }: {
+    onNext?: () => void;
+    onBack?: () => void;
+    rotuloProximo?: string;
+    rotuloPular?: string;
+    irKiro?: () => void; // no assistente leva ao passo do Kiro; em Configurações, à seção Kiro
+    embutido?: boolean;
+  } = $props();
+  const configurarKiro = () => (irKiro ? irKiro() : nav.ir("config", "kiro"));
 
   type Conta = { id: number; nome: string; host: string; usuario: string };
   type Projeto = { id: number; account_id: number; account_nome: string; slug: string; nome: string };
@@ -28,6 +42,7 @@
   let testes = $state<Record<string, Teste>>({});
   let erro = $state("");
   let ocupado = $state(false);
+  let lido = $state(false); // já leu as contas do banco (evita piscar o aviso do Kiro)
 
   // formulário da conta
   let nome = $state("");
@@ -59,6 +74,7 @@
       contas = await invoke<Conta[]>("list_taiga_accounts");
       projetos = await invoke<Projeto[]>("list_taiga_projects");
       links = await invoke<Link[]>("list_repo_links");
+      lido = true;
     });
     for (const l of links) {
       invoke<string[]>("list_repo_branches", { folderId: l.folder_id, rel: l.rel })
@@ -132,11 +148,31 @@
 
   const completo = (l: Link) => l.project_id !== null && !!l.branch;
   const algumCompleto = $derived(links.some(completo));
+  // O Taiga depende do Kiro (relatórios e resumos). Sem Kiro e sem conta, o cadastro fica no aviso; com conta já
+  // cadastrada o formulário continua acessível, com o aviso por cima.
+  const semKiro = $derived(capacidades.carregado && !capacidades.kiroPronto);
+  $effect(() => {
+    if (lido) capacidades.definirContasTaiga(contas.length);
+  });
   const podeAdicionar = $derived(!!(nome.trim() && host.trim() && usuario.trim() && senha));
 
   onMount(carregar);
 </script>
 
+{#if lido && semKiro && contas.length === 0}
+  <Requisito
+    texto="O Taiga precisa do Kiro: os relatórios e os resumos das US são gerados por ele. Configure o Kiro primeiro; depois volte aqui para cadastrar sua conta do Taiga. Se só quiser commit e push em lote, nem precisa."
+    acao="Configurar o Kiro"
+    onAcao={configurarKiro}
+  />
+{:else}
+  {#if lido && semKiro}
+    <Requisito
+      texto="O Kiro não está pronto (instalação ou login). Sem ele, relatórios e resumos das US não funcionam."
+      acao="Configurar o Kiro"
+      onAcao={configurarKiro}
+    />
+  {/if}
 <p class="det" style="margin-top: 0">
   Cadastre sua conta do Taiga, importe os projetos que você usa e diga, para cada repositório, qual é o projeto e
   qual branch dispara o relatório e a criação da história (US).
@@ -274,10 +310,12 @@
   {/each}
 </ul>
 
+{/if}
+
 {#if !embutido}
   <div class="acoes">
     <button type="button" onclick={onBack}>Voltar</button>
-    <button type="button" class="primario" disabled={!algumCompleto} onclick={onNext}>Continuar</button>
+    <button type="button" class:primario={algumCompleto} onclick={onNext}>{algumCompleto ? rotuloProximo : rotuloPular}</button>
   </div>
 {/if}
 

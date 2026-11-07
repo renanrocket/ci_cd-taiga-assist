@@ -1,5 +1,8 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
+  import Requisito from "$lib/Requisito.svelte";
+  import { capacidades } from "$lib/capacidades.svelte";
+  import { nav } from "$lib/nav.svelte";
   import { onMount } from "svelte";
   import Modal from "$lib/Modal.svelte";
   import { tarefas } from "$lib/tasks.svelte";
@@ -43,6 +46,8 @@
 
   const chave = (r: Repo, b: Branch) => `${r.rel}::${b.nome}`;
   const temTaiga = (r: Repo) => !!(r.projeto && r.branch_gatilho);
+  // Relatório + US só existem com Kiro pronto E conta Taiga; senão o app faz só commit e push.
+  const podeUs = $derived(capacidades.taigaPronto);
 
   async function carregarRepos() {
     if (pastaId === null) return;
@@ -67,6 +72,7 @@
   }
 
   onMount(async () => {
+    capacidades.atualizar();
     try {
       pastas = (await invoke<Pasta[]>("list_folders")).filter((p) => p.existe);
       pastaId = pastas[0]?.id ?? null;
@@ -108,7 +114,7 @@
         rel: r.rel,
         nome: r.nome,
         branches: r.branches.filter((b) => marcadas[chave(r, b)]).map((b) => b.nome),
-        taiga: criarUs && push && temTaiga(r),
+        taiga: criarUs && podeUs && push && temTaiga(r),
         gatilho: r.branch_gatilho,
         sujo: r.sujo,
         atual: r.atual,
@@ -227,9 +233,20 @@
         style="margin-top: 6px; {push ? '' : 'opacity: 0.5'}"
         title="Marcado: depois do push da branch gatilho de cada repositório com Taiga, gera o relatório com o Kiro e cria a US. Desmarcado: nenhum relatório nem US é criado neste commit, mesmo com Taiga e Kiro configurados. Requer o push."
       >
-        <input type="checkbox" bind:checked={criarUs} disabled={!push} />
+        <input type="checkbox" checked={criarUs && podeUs} onchange={(e) => (criarUs = e.currentTarget.checked)} disabled={!push || !podeUs} />
         Criar US no Taiga (gera o relatório com o Kiro)
       </label>
+      {#if capacidades.carregado && !podeUs}
+        <div style="margin-top: 6px">
+          <Requisito
+            texto={capacidades.kiroPronto
+              ? "Para criar a US a cada push, cadastre sua conta do Taiga. Sem isso o app faz só commit e push."
+              : "Para criar a US a cada push, configure o Kiro e depois o Taiga. Sem isso o app faz só commit e push."}
+            acao={capacidades.kiroPronto ? "Configurar o Taiga" : "Configurar o Kiro"}
+            onAcao={() => nav.ir("config", capacidades.kiroPronto ? "taiga" : "kiro")}
+          />
+        </div>
+      {/if}
       <div class="linha" style="justify-content: flex-end; margin-top: 8px">
         <button type="submit" class="primario" disabled={!podeCommitar}>Commitar ({qtd} branch(es))</button>
       </div>
